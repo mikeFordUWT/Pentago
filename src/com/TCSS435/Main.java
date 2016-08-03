@@ -16,9 +16,9 @@ public class Main {
     static final char BLACK = 'b', WHITE = 'w';
 
     static final String WELCOME =
-            "****************************************\n" +
-            "*          WELCOME TO PENTAGO!         *\n"  +
-                    "****************************************\n";
+              "****************************************\n"
+            + "*          WELCOME TO PENTAGO!         *\n"
+            + "****************************************\n";
 
 
     public static void main(String[] args) throws IOException {
@@ -41,9 +41,19 @@ public class Main {
 	    Board newB = new Board();
         output(WELCOME, ps);
         output(PLAY_NUM, ps);
+        int playAmt = 0 ;
+        boolean players = false;
+        while(!players){
+            int pA = Integer.parseInt(input.nextLine());
+            if(pA > 0 && pA< 3){
+                playAmt = pA;
+                players = true;
+            }else{
+                System.out.println("There can only be 1 or 2 players. Try Again");
+                System.out.println(PLAY_NUM);
+            }
+        }
 
-
-        int playAmt =Integer.parseInt(input.nextLine());
 
         if(playAmt == 1){
             //TODO allow user to specify color AKA turn
@@ -68,10 +78,10 @@ public class Main {
         boolean gameOver = false;
         while(!gameOver){
             char piece;
-            if(player %2 == 0){
-                piece = 'w';
+            if(player % 2 == 0){
+                piece = WHITE;//Player 2
             }else{
-                piece = 'b';
+                piece = BLACK;//Player 1
             }
 
             System.out.println(PIECE_SPOT);
@@ -106,9 +116,22 @@ public class Main {
     /*
         A helper method for writing to both a file and the console.®
      */
-    private static void output(String msg, PrintStream out1){
+    static void output(String msg, PrintStream out1){
         out1.println(msg);
         System.out.println(msg);
+    }
+
+    /*
+        Helper method to check is a string can be parsed into an Integer.
+     */
+    static boolean isParseable(String toParse){
+        boolean p = true;
+        try{
+            Integer.parseInt(toParse);
+        }catch (NumberFormatException e){
+            p = false;
+        }
+        return p;
     }
 
 }

@@ -13,6 +13,7 @@ public class PentagoNode {
     private char[][] myQ3;
     private char[][] myQ4;
     private ArrayList<PentagoNode> myChildren;
+    private int myValue;
 
     public PentagoNode(char[][] q1, char[][] q2, char[][] q3, char[][] q4){
         myQ1 = q1;
@@ -22,6 +23,7 @@ public class PentagoNode {
 
         myChildren = new ArrayList<>();
     }
+
 
 
 
