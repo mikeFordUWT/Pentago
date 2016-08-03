@@ -7,26 +7,32 @@ public class Player {
 
     private boolean myAI;
     private char myPiece;
+    private String myName;
 
     /**
      * Constructor for Player.
      *
      * @param theAI is it a human or a death robot?
      */
-    public Player(boolean theAI, char thePiece){
+    public Player(boolean theAI, char thePiece, String name){
         myAI = theAI;
         myPiece = thePiece;
+        myName = name;
     }
 
     /**
      * Getter for HUMAN Status
      * @return
      */
-    public boolean getAISTatus(){
+    public boolean isAI(){
         return myAI;
     }
 
     public char getPiece(){
         return myPiece;
+    }
+
+    public String getName(){
+        return myName;
     }
 }

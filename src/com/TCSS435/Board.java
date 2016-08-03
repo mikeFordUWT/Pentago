@@ -81,14 +81,10 @@ public class Board{
      * @param col
      * @param b
      */
-    public void changeSpace(int quadrant, int row, int col, char b){
-        if(row < 0 || row > 2 || col < 0 || col > 2){
-            System.out.println("That's not a valid space, try again");
-            System.out.println(this.toString());
-        }else if(b != WHITE && b!= BLACK){
-            System.out.println("NOT A VALID PIECE!");
-            System.out.println(this.toString());
-        }else{
+    public boolean changeSpace(int quadrant, int row, int col, char b){
+        boolean toReturn;
+        if(quadrant >= 0 && quadrant <=3 && row >= 0 && row <= 2 && col >=0 && col <= 2){
+            toReturn = true;
             if(QUADS.contains(quadrant)){
                 if(quadrant == 1){
                     if(myQ1[row][col] == EMPTY){
@@ -116,11 +112,12 @@ public class Board{
                     }
                 }
 
-            }else{
-                System.out.println("That's not a valid QUADRANT");
             }
+        }else{
+            toReturn = false;
         }
 
+        return toReturn;
     }
 
     /**
