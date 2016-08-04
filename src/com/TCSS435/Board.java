@@ -21,6 +21,8 @@ public class Board{
     private char[][] myQ3;
     private char[][] myQ4;
     private char[][] myState;
+    private PentagoNode myGameState;
+    private PentagoTree myGameTree;
 
     private int myBs;
     private int myWs;
@@ -39,18 +41,14 @@ public class Board{
                 myQ4[i][j] = EMPTY;
             }
         }
+        myGameState = new PentagoNode(myQ1, myQ2, myQ3, myQ4, 0, null);
+        myGameTree = new PentagoTree(new PentagoNode(myQ1, myQ2, myQ3, myQ4, 0, null));
+
     }
 
 
-    private char[][] getQuadrant(char[][] theState, int startI, int endI, int startJ, int endJ){
-        char[][] quad = new char[3][3];
-        for(int i = startI; i < endI; i++){
-            for(int j = startJ; j < endJ; j++){
-                quad[i][j] = theState[i][j];
-            }
-        }
-
-        return quad;
+    public PentagoNode getGameState(){
+        return myGameState;
     }
 
     /**
@@ -82,39 +80,40 @@ public class Board{
      * @param b
      */
     public boolean changeSpace(int quadrant, int row, int col, char b){
-        boolean toReturn;
-        if(quadrant >= 0 && quadrant <=3 && row >= 0 && row <= 2 && col >=0 && col <= 2){
-            toReturn = true;
+        boolean toReturn = false;
+        if(quadrant >= 1 && quadrant <=4 && row >= 0 && row <= 2 && col >=0 && col <= 2){
             if(QUADS.contains(quadrant)){
                 if(quadrant == 1){
                     if(myQ1[row][col] == EMPTY){
                         myQ1[row][col] = b;
+                        toReturn = true;
                     }else {
                         System.out.println(OCCUPIED);
                     }
                 } else if(quadrant == 2){
                     if(myQ2[row][col] == EMPTY){
                         myQ2[row][col] = b;
+                        toReturn = true;
                     }else {
                         System.out.println(OCCUPIED);
                     }
                 } else if(quadrant == 3){
                     if(myQ3[row][col] == EMPTY){
                         myQ3[row][col] = b;
+                        toReturn = true;
                     }else {
                         System.out.println(OCCUPIED);
                     }
                 } else if(quadrant == 4){
                     if(myQ4[row][col] == EMPTY){
                         myQ4[row][col] = b;
+                        toReturn = true;
                     }else {
                         System.out.println(OCCUPIED);
                     }
                 }
 
             }
-        }else{
-            toReturn = false;
         }
 
         return toReturn;
@@ -175,6 +174,31 @@ public class Board{
         }
     }
 
+    /*
+        Helper method for combining the Quads into one 2d Array
+     */
+    private char[][] bringItTogether(){
+        char[][] wholeBoard = new char[BOARD_DIM][BOARD_DIM];
+        for(int i = 0; i < BOARD_DIM; i++){
+            for(int j = 0; j < BOARD_DIM; j++){
+                if(i < BOARD_DIM/2 && j < BOARD_DIM/2){
+                    wholeBoard[i][j] = myQ1[i][j];
+                }
+                if(i < BOARD_DIM/2 && j >= BOARD_DIM/2){
+                    wholeBoard[i][j] = myQ2[i][j];
+                }
+                if(i >= BOARD_DIM/2 && j < BOARD_DIM/2){
+                    wholeBoard[i][j] = myQ3[i][j];
+                }
+                if(i >= BOARD_DIM/2 && j >= BOARD_DIM/2){
+                    wholeBoard[i][j] = myQ4[i][j];
+                }
+
+            }
+        }
+
+        return wholeBoard;
+    }
 
     private char[][] makeCopy(char[][] toCopy){
         char[][] copy = new char[toCopy.length][toCopy.length];

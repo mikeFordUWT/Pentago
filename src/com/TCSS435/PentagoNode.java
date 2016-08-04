@@ -2,12 +2,17 @@ package com.TCSS435;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Mike on 7/26/16.
  */
 public class PentagoNode implements Comparable<PentagoNode>{
-
+    private final char EMPTY = '.', WHITE = 'W', BLACK = 'B', TIE = 'T';
+    private final ArrayList<Integer> QUADS = new ArrayList<>(Arrays.asList(1,2,3,4));
+    private final String OCCUPIED = "That space isn't available";
+    private final int QUAD_DIM = 3;
+    private final int BOARD_DIM = 6;
     private char[][] myQ1;
     private char[][] myQ2;
     private char[][] myQ3;
@@ -18,10 +23,18 @@ public class PentagoNode implements Comparable<PentagoNode>{
     private PentagoNode myParent;
 
     public PentagoNode(char[][] q1, char[][] q2, char[][] q3, char[][] q4, int theDepth, PentagoNode parent){
-        myQ1 = q1;
-        myQ2 = q2;
-        myQ3 = q3;
-        myQ4 = q4;
+        myQ1 = new char[QUAD_DIM][QUAD_DIM];
+        myQ2 = new char[QUAD_DIM][QUAD_DIM];
+        myQ3 = new char[QUAD_DIM][QUAD_DIM];
+        myQ4 = new char[QUAD_DIM][QUAD_DIM];
+        for(int i = 0; i < QUAD_DIM; i++){
+            for(int j = 0; j < QUAD_DIM; j++){
+                myQ1[i][j] = EMPTY;
+                myQ2[i][j] = EMPTY;
+                myQ3[i][j] = EMPTY;
+                myQ4[i][j] = EMPTY;
+            }
+        }
         myDepth = theDepth;
         myParent = parent;
         myChildren = new ArrayList<>();
@@ -60,23 +73,132 @@ public class PentagoNode implements Comparable<PentagoNode>{
     }
 
     /**
+     * A method that will update the position of a spot on the board.
+     *
+     * @param quadrant
+     * @param row
+     * @param col
+     * @param b
+     */
+    public boolean changeSpace(int quadrant, int row, int col, char b){
+        boolean toReturn = false;
+        if(quadrant >= 1 && quadrant <=4 && row >= 0 && row <= 2 && col >=0 && col <= 2){
+            if(QUADS.contains(quadrant)){
+                if(quadrant == 1){
+                    if(myQ1[row][col] == EMPTY){
+                        myQ1[row][col] = b;
+                        toReturn = true;
+                    }else {
+                        System.out.println(OCCUPIED);
+                    }
+                } else if(quadrant == 2){
+                    if(myQ2[row][col] == EMPTY){
+                        myQ2[row][col] = b;
+                        toReturn = true;
+                    }else {
+                        System.out.println(OCCUPIED);
+                    }
+                } else if(quadrant == 3){
+                    if(myQ3[row][col] == EMPTY){
+                        myQ3[row][col] = b;
+                        toReturn = true;
+                    }else {
+                        System.out.println(OCCUPIED);
+                    }
+                } else if(quadrant == 4){
+                    if(myQ4[row][col] == EMPTY){
+                        myQ4[row][col] = b;
+                        toReturn = true;
+                    }else {
+                        System.out.println(OCCUPIED);
+                    }
+                }
+
+            }
+        }
+
+        return toReturn;
+    }
+
+    /**
+     * Checks to see if there is a win state in this node.
+     * @return
+     */
+    public boolean winState(){
+        boolean win = false;
+        char[][] wholeBoard = bringItTogether();
+
+        for(int i = 0; i < 6; i++){
+            for(int j = 0; j < 6; j++){
+
+            }
+        }
+
+        return win;
+    }
+
+    /*
+        Helper method for combining the Quads into one 2d Array
+     */
+    private char[][] bringItTogether(){
+        char[][] wholeBoard = new char[BOARD_DIM][BOARD_DIM];
+        for(int i = 0; i < BOARD_DIM; i++){
+            for(int j = 0; j < BOARD_DIM; j++){
+                if(i < BOARD_DIM/2 && j < BOARD_DIM/2){
+                    wholeBoard[i][j] = myQ1[i][j];
+                }
+                if(i < BOARD_DIM/2 && j >= BOARD_DIM/2){
+                    wholeBoard[i][j] = myQ2[i][j-QUAD_DIM];
+                }
+                if(i >= BOARD_DIM/2 && j < BOARD_DIM/2){
+                    wholeBoard[i][j] = myQ3[i - QUAD_DIM][j];
+                }
+                if(i >= BOARD_DIM/2 && j >= BOARD_DIM/2){
+                    wholeBoard[i][j] = myQ4[i - QUAD_DIM][j - QUAD_DIM];
+                }
+
+            }
+        }
+
+        return wholeBoard;
+    }
+    /**
      *
      * @return
      */
     @Override
     public String toString(){
-        String divider = "+-------+-------+\n";
+        char[][] wholeBoard = bringItTogether();
+        String line = "|";
+        String newLine = "\n";
+        String divider = "+---------+---------+\n";
         StringBuilder output = new StringBuilder(divider);
-        output.append("| " + myQ1[0][0] + " " + myQ1[0][1] + " "+ myQ1[0][2] + " | " + myQ2[0][0] + " " + myQ2[0][1] + " " + myQ2[0][2] + " |\n");
-        output.append("| " + myQ1[1][0] + " " + myQ1[1][1] + " "+ myQ1[1][2] + " | " + myQ2[1][0] + " " + myQ2[1][1] + " " + myQ2[1][2] + " |\n");
-        output.append("| " + myQ1[2][0] + " " + myQ1[2][1] + " "+ myQ1[2][2] + " | " + myQ2[2][0] + " " + myQ2[2][1] + " " + myQ2[2][2] + " |\n");
-        output.append(divider);
-        output.append("| " + myQ3[0][0] + " " + myQ3[0][1] + " "+ myQ3[0][2] + " | " + myQ4[0][0] + " " + myQ4[0][1] + " " + myQ4[0][2] + " |\n");
-        output.append("| " + myQ3[1][0] + " " + myQ3[1][1] + " "+ myQ3[1][2] + " | " + myQ4[1][0] + " " + myQ4[1][1] + " " + myQ4[1][2] + " |\n");
-        output.append("| " + myQ3[2][0] + " " + myQ3[2][1] + " "+ myQ3[2][2] + " | " + myQ4[2][0] + " " + myQ4[2][1] + " " + myQ4[2][2] + " |\n");
-        output.append(divider);
+        for(int i = 0; i < QUAD_DIM; i++){
+            for(int j = 0; j< BOARD_DIM; j++){
 
+                if(j == 0 || j == BOARD_DIM/2){ //Add vertical line
+                    output.append(line);
+                }
+                output.append(" " + wholeBoard[i][j] + " ");//add the char and space buffers
 
+                if(j == BOARD_DIM - 1){ //add vertical line and drop down
+                    output.append(line+newLine);
+                }
+            }
+        }
+        output.append(divider);
+        for(int i = QUAD_DIM; i < BOARD_DIM; i++){
+            for(int j = 0; j < BOARD_DIM; j++){
+                if(j == 0 || j == BOARD_DIM/2){ //Add vertical line
+                    output.append(line);
+                }
+                output.append(" " + wholeBoard[i][j] + " ");//add the char and space buffers
+                if(j == BOARD_DIM - 1){ //add vertical line and drop down
+                    output.append(line+newLine);
+                }
+            }
+        }
+        output.append(divider);
         return output.toString();
    }
 

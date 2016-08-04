@@ -21,7 +21,7 @@ public class Player {
     }
 
     /**
-     * Getter for HUMAN Status
+     * Getter for AI_STATUS Status
      * @return
      */
     public boolean isAI(){
