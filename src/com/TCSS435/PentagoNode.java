@@ -58,13 +58,12 @@ public class PentagoNode implements Comparable<PentagoNode> {
 
         findValue();
         myValue = maxValue + minValue;
-
-
     }
 
     public void setPlayer(Player thePlayer){
         myPlayer = thePlayer;
     }
+
     public void addChild(PentagoNode theChild){
         myChildren.add(theChild);
     }
@@ -915,7 +914,7 @@ public class PentagoNode implements Comparable<PentagoNode> {
             }
         }
 
-//        minValue = -minValue;
+        minValue = -minValue;
         myValue = maxValue + minValue;
         int x = 0;
     }

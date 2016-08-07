@@ -236,8 +236,10 @@ public class PentagoGame {
                 ArrayList<Integer> coords = spotToArray.get(spot);
                 board.getGameState().changeSpace(spotQuad, coords.get(0), coords.get(1), current.getPiece());
                 output(board.getGameState().toString(), ps);
-                //TODO win check after piece placement
-
+                if(board.getGameState().winState()!= -1){
+                    gameDone = true;
+                    //TODO check the state of winstate
+                }
                 if(!gameDone){//only enter if the game is still going after piece placement
                     if(direction == LEFT){
                         board.getGameState().rotateLeft(rotateQuad);
@@ -245,7 +247,10 @@ public class PentagoGame {
                         board.getGameState().rotateRight(rotateQuad);
                     }
                     output(board.getGameState().toString(), ps);
-                    //TODO win check after rotation
+                    if(board.getGameState().winState() != -1){
+                        gameDone = true;
+                        //TODO check the state of winstate
+                    }
 
                 }
 
