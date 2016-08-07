@@ -44,11 +44,10 @@ public class PentagoGame {
 
 
         boolean p1Human = AI_STATUS;
-        boolean p2Human = !AI_STATUS;
+        boolean p2AI = !AI_STATUS;
         String p1Name = "";
         String p2Name = "";
         char aiAlg = ' ';
-	    Board board = new Board();
         output(WELCOME, ps);
         output(PLAY_NUM, ps);
         int playAmt = 0 ;
@@ -117,7 +116,7 @@ public class PentagoGame {
         if(playAmt == 2){
             output(SECOND_NAME, ps);
             line = scanner.nextLine();
-            p2Human = AI_STATUS;
+            p2AI = AI_STATUS;
             while(!go) {
                 if(line.length() > 0){
                     p2Name = line;
@@ -164,8 +163,20 @@ public class PentagoGame {
 
         player = first;
 
-        p1 = new Player(AI_STATUS, player1Token, p1Name);
-        p2 = new Player(p2Human, player2Token, p2Name);
+        Board board;
+
+        if(player == 1){
+            p1 = new Player(AI_STATUS, player1Token, p1Name, true);
+            p2 = new Player(p2AI, player2Token, p2Name, false);
+            board = new Board(p1, p2);
+        }else{
+            p1 = new Player(AI_STATUS, player1Token, p1Name, false);
+            p2 = new Player(p2AI, player2Token, p2Name, true);
+            board = new Board(p2, p1);
+        }
+
+
+
 
 
         output("", ps);
@@ -221,10 +232,22 @@ public class PentagoGame {
                         line = scanner.nextLine();
                     }
                 }
-
+                go = false;
                 ArrayList<Integer> coords = spotToArray.get(spot);
-//                TODO where I left off!
+                board.getGameState().changeSpace(spotQuad, coords.get(0), coords.get(1), current.getPiece());
+                output(board.getGameState().toString(), ps);
+                //TODO win check after piece placement
 
+                if(!gameDone){//only enter if the game is still going after piece placement
+                    if(direction == LEFT){
+                        board.getGameState().rotateLeft(rotateQuad);
+                    }else if(direction == RIGHT){
+                        board.getGameState().rotateRight(rotateQuad);
+                    }
+                    output(board.getGameState().toString(), ps);
+                    //TODO win check after rotation
+
+                }
 
 
             }
@@ -232,189 +255,6 @@ public class PentagoGame {
             player++;
         }
 
-        boolean players = false;
-
-
-        while(!players){
-            boolean parse = false;
-            int pA = 0;
-            String nl = scanner.nextLine();
-            while(!parse){
-                if(isParseable(nl)){
-                    pA = Integer.parseInt(nl);
-                    parse = true;
-                }else{
-                    System.out.println("That is not the right input try again");
-                    System.out.println(PLAY_NUM);
-                    nl = scanner.nextLine();
-                }
-            }
-
-            if(pA > 0 && pA< 3){
-                playAmt = pA;
-                players = true;
-            }else{
-                System.out.println("There can only be 1 or 2 players. Try Again");
-                System.out.println(PLAY_NUM);
-            }
-        }
-        output(FIRST_NAME, ps);
-        p1Name = scanner.nextLine();
-
-
-        output(TOKEN_COLOR, ps);
-        char p1Token = ' ';
-        char p2Token = ' ';
-        char tokenColor =' ';
-        boolean token = false;
-
-        String nextLine = scanner.nextLine().toUpperCase();
-        while(!token){
-
-            if(nextLine.length() == 1 && nextLine.charAt(0) == BLACK){
-                p1Token = BLACK;
-                p2Token = WHITE;
-                token = true;
-            }else if(nextLine.length() == 1 && nextLine.charAt(0) == WHITE){
-                p1Token = WHITE;
-                p2Token = BLACK;
-                token = true;
-            }else{
-                output("The choices are B or W.\n", ps);
-                output(TOKEN_COLOR, ps);
-                nextLine = scanner.nextLine().toUpperCase();
-            }
-
-        }
-
-        if(playAmt == 2){
-            output(SECOND_NAME, ps);
-            p2Name = scanner.nextLine();
-            p2Human = AI_STATUS;
-        } else {
-            p2Name = AI_NAME;
-            output(ALGORITM, ps);
-            boolean cont = false;
-            String inString = scanner.nextLine().toUpperCase();
-            while(!cont){
-                if(inString.length() == 1 && (inString.charAt(0) == 'A'|| inString.charAt(0) == 'M')){
-                    aiAlg = inString.charAt(0);
-                    cont = true;
-                }else{
-                    System.out.println("That's not valid, enter either A or M");
-                    System.out.println(ALGORITM);
-                    inString = scanner.nextLine().toUpperCase();
-                }
-            }
-        }
-
-
-
-
-        if(playAmt == 1){
-            output(WHICH_FIRST, ps);
-            int first2 = 0;
-            boolean done2 = false;
-            nextLine = scanner.nextLine();
-            while(!done2){
-                if(nextLine.length() != 1 && (nextLine.charAt(0) != '1' || nextLine.charAt(0) != '2')){
-                    output("The only options here are 1 or 2.", ps);
-                    output(WHICH_FIRST, ps);
-                    nextLine = scanner.nextLine();
-                }else{
-                    first2 = Integer.parseInt(nextLine);
-                    done2 = true;
-                }
-            }
-            if(first2 == 1){
-                player = 1;
-            }else{
-                player = 2;
-            }
-
-        }
-        p1 = new Player(AI_STATUS, p1Token, p1Name);
-        p2 = new Player(p2Human, p2Token, p2Name);
-
-        /*
-            GAME STARTS HERE!
-         */
-        output("", ps);
-        output(board.toString(), ps);
-
-
-        boolean gameOver = false;
-        while(!gameOver){
-            Player current;
-            char piece;
-            if(player % 2 == 0){ //PLAYER 2
-                current = p2;
-            }else{ //PLAYER 1
-                current = p1;
-            }
-
-            if(current.isAI()){//that means it's an AI!
-
-            }else{
-
-            }
-
-            System.out.println(current.getName());
-            System.out.println(PIECE_SPOT);
-            //TODO update by using the boolean return of changeSpace
-            String piecePlace = scanner.nextLine();
-            boolean cont = false;
-            while(!cont){
-                if(piecePlace.length() == 6 && piecePlace.contains("/") && piecePlace.contains(" ")){
-                    String first1 = String.valueOf(piecePlace.charAt(0));
-                    String second = String.valueOf(piecePlace.charAt(2));
-                    String third = String.valueOf(piecePlace.charAt(4));
-                    String fourth = String.valueOf(piecePlace.charAt(5));
-                    if(isParseable(first1) && isParseable(second) && isParseable(third)){
-
-                    }
-                }else{
-
-                }
-            }
-            int quadrant = Character.getNumericValue(piecePlace.charAt(0));
-            int spot = Character.getNumericValue(piecePlace.charAt(2));
-            ArrayList<Integer> coords = spotToArray.get(spot);
-            board.changeSpace(quadrant, coords.get(0), coords.get(1), current.getPiece());
-            output(board.toString(), ps);
-
-            System.out.println(ROTATE_QUAD);
-            String rotate = scanner.nextLine();
-            int quad = 0;
-            char direction = ' ';
-            boolean parsable = false;
-            while(!parsable){
-                if(rotate.length() == 2){
-                    String R = rotate.toUpperCase();
-                    if(isParseable(String.valueOf(rotate.charAt(0))) && (R.charAt(1) == LEFT || R.charAt(1) == RIGHT)){
-                        quad = Integer.parseInt(String.valueOf(rotate.charAt(0)));
-                        direction = R.charAt(1);
-                        parsable = true;
-                    }else{
-                        System.out.println("Input must start with an integer [1-4] and have [L or R] as the second character");
-                        System.out.println(ROTATE_QUAD);
-                        rotate = scanner.nextLine();
-                    }
-                }else{
-                    System.out.println("The input must be exactly 2 characters long [ex. 1L or 4R]");
-                    System.out.println(ROTATE_QUAD);
-                    rotate = scanner.nextLine();
-                }
-            }
-
-            if(direction == LEFT){
-                board.rotateLeft(quad);
-            }else if(direction == RIGHT){
-                board.rotateRight(quad);
-            }
-            output(board.toString(), ps);
-            player++;
-        }
     }
 
     /*
