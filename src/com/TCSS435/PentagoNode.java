@@ -36,14 +36,23 @@ public class PentagoNode implements Comparable<PentagoNode> {
         myQ2 = new char[QUAD_DIM][QUAD_DIM];
         myQ3 = new char[QUAD_DIM][QUAD_DIM];
         myQ4 = new char[QUAD_DIM][QUAD_DIM];
-        for(int i = 0; i < QUAD_DIM; i++){
-            for(int j = 0; j < QUAD_DIM; j++){
-                myQ1[i][j] = EMPTY;
-                myQ2[i][j] = EMPTY;
-                myQ3[i][j] = EMPTY;
-                myQ4[i][j] = EMPTY;
+        if(parent == null){
+            for(int i = 0; i < QUAD_DIM; i++){
+                for(int j = 0; j < QUAD_DIM; j++){
+                    myQ1[i][j] = EMPTY;
+                    myQ2[i][j] = EMPTY;
+                    myQ3[i][j] = EMPTY;
+                    myQ4[i][j] = EMPTY;
+                }
             }
+        } else{
+            myQ1 = parent.getQ1();
+            myQ2 = parent.getQ2();
+            myQ3 = parent.getQ3();
+            myQ4 = parent.getQ4();
         }
+
+
         myDepth = theDepth;
         myParent = parent;
         myPlayer = player;
@@ -100,6 +109,9 @@ public class PentagoNode implements Comparable<PentagoNode> {
         return myValue;
     }
 
+    public Player getPlayer(){
+        return myPlayer;
+    }
 
     public void setDepth(int theDepth){
 
@@ -125,6 +137,13 @@ public class PentagoNode implements Comparable<PentagoNode> {
         return myQ4;
     }
 
+    public char[][] getState(){
+        return bringItTogether();
+    }
+
+    /*
+        Checks to see if the a state is a tie.
+     */
     private int tie(){
         int count = 0;
         char[][] whole = bringItTogether();
@@ -138,6 +157,9 @@ public class PentagoNode implements Comparable<PentagoNode> {
         return count;
     }
 
+    /*
+        Helper method that check a row to update the value of the node.
+     */
     private ArrayList<Integer> checkRow(char[][] board, int row){
         ArrayList<Integer> wb = new ArrayList<>();
         int b = 0, w = 0;
@@ -164,8 +186,16 @@ public class PentagoNode implements Comparable<PentagoNode> {
                     }
                 }
             }else{
-                bInRow = 0;
-                wInRow = 0;
+                if(current == BLACK){
+                    bInRow = 1;
+                    wInRow = 0;
+                }else if(current == WHITE){
+                    wInRow = 1;
+                    bInRow = 0;
+                }else{
+                    bInRow = 0;
+                    wInRow = 0;
+                }
             }
         }
 
@@ -174,6 +204,9 @@ public class PentagoNode implements Comparable<PentagoNode> {
         return wb;
     }
 
+    /*
+        Helper method that check a column to update the value of the node.
+     */
     private ArrayList<Integer> checkColumn(char[][] board, int column){
         ArrayList<Integer> wb = new ArrayList<>();
         int b = 0, w = 0;
@@ -200,8 +233,16 @@ public class PentagoNode implements Comparable<PentagoNode> {
                     }
                 }
             }else{
-                bInRow = 0;
-                wInRow = 0;
+                if(current == BLACK){
+                    bInRow = 1;
+                    wInRow = 0;
+                }else if(current == WHITE){
+                    wInRow = 1;
+                    bInRow = 0;
+                }else{
+                    bInRow = 0;
+                    wInRow = 0;
+                }
             }
         }
         wb.add(w);
@@ -209,7 +250,9 @@ public class PentagoNode implements Comparable<PentagoNode> {
         return  wb;
     }
 
-
+    /*
+        Helper method that check a diagonal to update the value of the node.
+     */
     private ArrayList<Integer> checkDiag(char[][] board, int start, int stop, int offset){
         ArrayList<Integer> wb = new ArrayList<>();
         int b = 0, w = 0;
@@ -237,8 +280,16 @@ public class PentagoNode implements Comparable<PentagoNode> {
                     }
                 }
             }else{
-                bInRow = 0;
-                wInRow = 0;
+                if(current == BLACK){
+                    bInRow = 1;
+                    wInRow = 0;
+                }else if(current == WHITE){
+                    wInRow = 1;
+                    bInRow = 0;
+                }else{
+                    bInRow = 0;
+                    wInRow = 0;
+                }
             }
         }
         wb.add(w);
@@ -246,6 +297,9 @@ public class PentagoNode implements Comparable<PentagoNode> {
         return wb;
     }
 
+    /*
+        Helper method that check an anti diagonal to update the value of the node.
+     */
     private ArrayList<Integer> checkAnti(char[][] board, int start, int stop, int offset){
         ArrayList<Integer> wb = new ArrayList<>();
         int b= 0, w=0;
@@ -273,8 +327,16 @@ public class PentagoNode implements Comparable<PentagoNode> {
                     }
                 }
             }else{
-                bInRow = 0;
-                wInRow = 0;
+                if(current == BLACK){
+                    bInRow = 1;
+                    wInRow = 0;
+                }else if(current == WHITE){
+                    wInRow = 1;
+                    bInRow = 0;
+                }else{
+                    bInRow = 0;
+                    wInRow = 0;
+                }
             }
         }
 
@@ -960,6 +1022,11 @@ public class PentagoNode implements Comparable<PentagoNode> {
     }
 
 
+    /**
+     * Rotates a quad right.
+     *
+     * @param quad the quad to rotate
+     */
     public void rotateRight(int quad){
         if(QUADS.contains(quad)){
             if(quad == 1){
@@ -977,6 +1044,9 @@ public class PentagoNode implements Comparable<PentagoNode> {
         findValue();
     }
 
+    /*
+        Helper method to rotate a quad left.
+     */
     private void rotateL(char[][] quad){
         char[][] temp = makeCopy(quad);
         for(int i = 0 ; i < quad.length; i++){
@@ -986,6 +1056,9 @@ public class PentagoNode implements Comparable<PentagoNode> {
         }
     }
 
+    /*
+        Helper method to rotate a quad right.
+     */
     private void rotateR(char[][] quad){
         char[][] temp = makeCopy(quad);
         for(int i = 0 ; i < quad.length; i++){
@@ -995,6 +1068,9 @@ public class PentagoNode implements Comparable<PentagoNode> {
         }
     }
 
+    /*
+        Helper method to make a copy of an 2D array
+     */
     private char[][] makeCopy(char[][] toCopy){
         char[][] copy = new char[toCopy.length][toCopy.length];
         for(int i = 0; i < toCopy.length; i++){
@@ -1008,10 +1084,10 @@ public class PentagoNode implements Comparable<PentagoNode> {
     /**
      * A method that will update the position of a spot on the board.
      *
-     * @param quadrant
-     * @param row
-     * @param col
-     * @param b
+     * @param quadrant which sub matrix to change
+     * @param row which row in that sub matrix to change
+     * @param col which column to change
+     * @param b what will the index be changed to
      */
     public boolean changeSpace(int quadrant, int row, int col, char b){
         boolean toReturn = false;
@@ -1088,8 +1164,9 @@ public class PentagoNode implements Comparable<PentagoNode> {
         return wholeBoard;
     }
     /**
+     * Overridden toString that prints out the node.
      *
-     * @return
+     * @return a string with the state of the board printed out
      */
     @Override
     public String toString(){
@@ -1127,12 +1204,22 @@ public class PentagoNode implements Comparable<PentagoNode> {
         return output.toString();
    }
 
+    /**
+     * Overriden equals method
+     * @param o object to be compared
+     * @return true if equals and false if not equals
+     */
    @Override
     public boolean equals(Object o){
        return this.toString().equals(o.toString());
    }
 
-
+    /**
+     * Overridden compareTo method, based on the path cost of the nodes.
+     *
+     * @param o object to be compared with
+     * @return -1 if this node is less than o, 0 if equal and 1 if this node is graeater than o
+     */
     @Override
     public int compareTo(PentagoNode o) {
         return Integer.compare(myValue, o.getValue());

@@ -1,5 +1,10 @@
 package com.TCSS435;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.PriorityQueue;
+
 /**
  * Board class that acts as an intermediate between PentagoNode and PantagoGame
  *
@@ -47,7 +52,7 @@ class Board{
      * A depth limited minmax.
      *
      * @param theDepth
-     * @param player
+     *
      * @return
      */
     /*
@@ -69,23 +74,29 @@ class Board{
 14             bestValue := min(bestValue, v)
 15         return bestValue
      */
-    public PentagoNode minmax(int theDepth, Player player){
-        String toReturn = "";
-        PentagoNode root = myGameState;
-        PentagoTree tree = new PentagoTree(root);
+    public PentagoNode minmax(PentagoNode theNode, int theDepth, Boolean maxPlayer) {
+        ArrayList<PentagoNode> moves = getMoves(theNode.getPlayer(), theNode);
+        PentagoNode toReturn;
+        if (theDepth == 0 || moves.size() == 0) {//a zero depth tree OR the node is a win state
+            toReturn = theNode;
+        } else if (moves.size() == 1) {//the list contains a winState before rotation
+            toReturn = moves.get(0);
+        } else {//we have rotation so list size > 1
+            ArrayList<PentagoNode> ret = new ArrayList<>(Arrays.asList(moves.get(0)));
+            if (maxPlayer) {
+                int bestScore = Integer.MIN_VALUE;
+                for(int i = 1; i < moves.size(); i++){
+                    PentagoNode v = minmax(moves.get(1), theDepth - 1, false);
+                }
 
-        PentagoNode current = root;
-
-        if(player.isMax()){
-
-        }else{
+            } else {//Min player
+                int bestScore = Integer.MAX_VALUE;
+            }
 
         }
-        boolean done = false;
-//        while(!done){
-//
-//        }
-        return current;
+
+
+        return toReturn;
     }
 
     /**
@@ -120,11 +131,7 @@ class Board{
         PentagoNode root = myGameState;
         PentagoTree tree = new PentagoTree(root);
 
-        if(player.isMax()){
-
-        }else{
-
-        }
+        root.setPlayer(player);
 
         boolean done = false;
 //        while(!done){
@@ -132,4 +139,78 @@ class Board{
 //        }
         return toReturn;
     }
+
+
+    //return possible moves, with the placement first, followed by the rotations
+    private ArrayList<PentagoNode> getMoves(Player player, PentagoNode theNode){
+        ArrayList<PentagoNode> moves = new ArrayList<>();
+        char[][] state = theNode.getState();
+        for(int i = 0; i< state.length; i++){
+            for(int j = 0; j < state.length; j++){
+                if(state[i][j] == '.'){
+                    PentagoNode current = new PentagoNode(theNode.getDepth() + 1, theNode, player);
+                    //Change the given spot, and update the data in the node
+                    if(i < 3 && j < 3){
+                        current.changeSpace(1,i, j, player.getPiece());
+                    }else if(i < 3 && j >=3){
+                        current.changeSpace(2, i, j-3, player.getPiece());
+                    }else if(i >= 3 && j < 3){
+                        current.changeSpace(3, i-3, j, player.getPiece());
+                    }else if(i>=3 && j >= 3){
+                        current.changeSpace(4, i-3, j-3, player.getPiece());
+                    }
+
+                    moves.add(current);
+                    if(current.winState() == -1){
+                        PentagoNode Q1L = rotateAndAdd(current, 'l',player, 1);
+                        moves.add(Q1L);
+                        PentagoNode Q1R = rotateAndAdd(current, 'r', player, 1);
+                        moves.add(Q1R);
+                        PentagoNode Q2L = rotateAndAdd(current, 'l', player, 2);
+                        moves.add(Q2L);
+                        PentagoNode Q2R = rotateAndAdd(current, 'r', player, 2);
+                        moves.add(Q2R);
+                        PentagoNode Q3L = rotateAndAdd(current, 'l', player, 3);
+                        moves.add(Q3L);
+                        PentagoNode Q3R = rotateAndAdd(current, 'r', player, 3);
+                        moves.add(Q3R);
+                        PentagoNode Q4L = rotateAndAdd(current, 'l', player, 4);
+                        moves.add(Q4L);
+                        PentagoNode Q4R = rotateAndAdd(current, 'r', player, 4);
+                        moves.add(Q4R);
+                    }
+                }
+            }
+        }
+
+
+        return moves;
+    }
+
+    private PentagoNode rotateAndAdd(PentagoNode theNode, char direction, Player player, int quad){
+        PentagoNode newNode = new PentagoNode(theNode.getDepth()+1, theNode, player);
+        if(direction == 'l'){
+            newNode.rotateLeft(quad);
+        } else if(direction == 'r'){
+            newNode.rotateLeft(quad);
+        }
+        return newNode;
+    }
+
+    private PentagoNode maxNode(PentagoNode first, PentagoNode second){
+        if(first.getValue() > second.getValue()){
+            return first;
+        }else{
+            return second;
+        }
+    }
+
+    private PentagoNode minNode(PentagoNode first, PentagoNode second){
+        if(first.getValue() < second.getValue()){
+            return first;
+        }else{
+            return second;
+        }
+    }
+
 }
