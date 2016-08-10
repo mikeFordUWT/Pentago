@@ -192,6 +192,8 @@ public class PentagoGame {
                 current = p1;
             }
 
+            board.getGameState().setPlayer(current);
+
             if(current.isAI()){
                 //TODO fill this out
 
