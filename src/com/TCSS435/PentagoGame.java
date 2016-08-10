@@ -196,6 +196,19 @@ public class PentagoGame {
 
             if(current.isAI()){
                 //TODO fill this out
+                PentagoNode newNode = board.minmaxPlace(board.getGameState(), 2, current);
+//                board.getGameState() = newNode;
+                System.out.println(board.getGameState().toString());
+                if(board.getGameState().winState()!= -1){
+                    gameDone = true;
+                }
+                if(!gameDone){
+                    board.minmaxRotate(board.getGameState(), 2, current);
+                    System.out.println(board.getGameState().toString());
+                    if(board.getGameState().winState() != -1){
+                        gameDone = true;
+                    }
+                }
 
             }else{
                 output(current.getName()+"'s turn", ps);

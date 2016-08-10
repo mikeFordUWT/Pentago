@@ -46,10 +46,10 @@ public class PentagoNode implements Comparable<PentagoNode> {
                 }
             }
         } else{
-            myQ1 = parent.getQ1();
-            myQ2 = parent.getQ2();
-            myQ3 = parent.getQ3();
-            myQ4 = parent.getQ4();
+            myQ1 = makeCopy(parent.getQ1());
+            myQ2 = makeCopy(parent.getQ2());
+            myQ3 = makeCopy(parent.getQ3());
+            myQ4 = makeCopy(parent.getQ4());
         }
 
 
