@@ -2,6 +2,7 @@ package com.TCSS435;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.PriorityQueue;
 
 /**
@@ -51,7 +52,7 @@ class Board{
      * A depth limited minmax.
      *
      * @param theDepth
-     * @param player
+     *
      * @return
      */
     /*
@@ -73,27 +74,28 @@ class Board{
 14             bestValue := min(bestValue, v)
 15         return bestValue
      */
-    public PentagoNode minmax(PentagoNode theNode, int theDepth, Boolean maxPlayer){
+    public PentagoNode minmax(PentagoNode theNode, int theDepth, Boolean maxPlayer) {
+        ArrayList<PentagoNode> moves = getMoves(theNode.getPlayer(), theNode);
         PentagoNode toReturn;
-        PentagoNode current = theNode;
-        PentagoTree tree = new PentagoTree(current);
+        if (theDepth == 0 || moves.size() == 0) {//a zero depth tree OR the node is a win state
+            toReturn = theNode;
+        } else if (moves.size() == 1) {//the list contains a winState before rotation
+            toReturn = moves.get(0);
+        } else {//we have rotation so list size > 1
+            ArrayList<PentagoNode> ret = new ArrayList<>(Arrays.asList(moves.get(0)));
+            if (maxPlayer) {
+                int bestScore = Integer.MIN_VALUE;
+                for(int i = 1; i < moves.size(); i++){
+                    PentagoNode v = minmax(moves.get(1), theDepth - 1, false);
+                }
 
-
-        int bestScore = 0;
-        if(maxPlayer){
-            bestScore = Integer.MIN_VALUE;
-//            ArrayList<PentagoNode> moves = getMoves(player, current);
-            for(int i = 0; i < moves.size(); i++){
-
+            } else {//Min player
+                int bestScore = Integer.MAX_VALUE;
             }
 
-        }else{
-            bestScore = Integer.MAX_VALUE;
         }
-        boolean done = false;
-//        while(!done){
-//
-//        }
+
+
         return toReturn;
     }
 
@@ -193,6 +195,22 @@ class Board{
             newNode.rotateLeft(quad);
         }
         return newNode;
+    }
+
+    private PentagoNode maxNode(PentagoNode first, PentagoNode second){
+        if(first.getValue() > second.getValue()){
+            return first;
+        }else{
+            return second;
+        }
+    }
+
+    private PentagoNode minNode(PentagoNode first, PentagoNode second){
+        if(first.getValue() < second.getValue()){
+            return first;
+        }else{
+            return second;
+        }
     }
 
 }

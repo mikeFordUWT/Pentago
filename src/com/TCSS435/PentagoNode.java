@@ -109,6 +109,9 @@ public class PentagoNode implements Comparable<PentagoNode> {
         return myValue;
     }
 
+    public Player getPlayer(){
+        return myPlayer;
+    }
 
     public void setDepth(int theDepth){
 
