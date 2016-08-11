@@ -302,7 +302,7 @@ public class PentagoNode implements Comparable<PentagoNode> {
      */
     private ArrayList<Integer> checkAnti(char[][] board, int start, int stop, int offset){
         ArrayList<Integer> wb = new ArrayList<>();
-        int b= 0, w=0;
+        int b = 0, w =0;
         int bInRow = 1;
         int wInRow = 1;
         for(int i = start; i <= stop; i++){
@@ -316,7 +316,6 @@ public class PentagoNode implements Comparable<PentagoNode> {
                         b += 80;
                         bWin++;
                     }
-
                 }else{
                     wInRow++;
                     if(wInRow == 3 || wInRow == 4){
