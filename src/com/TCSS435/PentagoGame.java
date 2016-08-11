@@ -180,8 +180,7 @@ public class PentagoGame {
         boolean gameDone = false;
         while(!gameDone){
             Player current;
-            char piece;
-            int p = player % 2;
+
             if(player % 2 == 0){
                 current = p2;
             }else{
@@ -191,10 +190,11 @@ public class PentagoGame {
             board.getGameState().setPlayer(current);
 
             if(current.isAI()){
+                output(current.getName()+"'s turn", ps);
                 aiAlg = Character.toUpperCase(aiAlg);
-                if(aiAlg == 'M'){
+                if(aiAlg == MINMAX){
                     PentagoNode temp = board.getGameState();
-                    PentagoNode newNode = board.minmaxPlace(board.getGameState(), 3, current);
+                    PentagoNode newNode = board.minmax(board.getGameState(), 3, current, MINMAX);
 
                     PentagoNode currentNode = newNode;
                     while(!currentNode.getParent().equals(temp) && currentNode.getParent()!= null){
@@ -205,29 +205,29 @@ public class PentagoGame {
                     }
 
                     board.setGameState(currentNode);
-                    System.out.println(board.getGameState().toString());
+                    output(board.getGameState().toString(), ps);
                     if(board.getGameState().winState()!= -1){
                         gameDone = true;
                     }
                     if(!gameDone){
-
                         temp = board.getGameState();
-                        newNode = board.minmaxRotate(board.getGameState(), 3, current);
+                        newNode = board.minmax(board.getGameState(), 3, current, RIGHT);
                         currentNode = newNode;
                         while (!currentNode.getParent().equals(temp) && currentNode.getParent() != null){
                             currentNode = currentNode.getParent();
                         }
                         board.setGameState(currentNode);
 
-                        System.out.println(board.getGameState().toString());
+                        output(board.getGameState().toString(), ps);
                         if(board.getGameState().winState() != -1){
                             gameDone = true;
                         }
                     }
-                }else if(aiAlg == 'B'){
+                }else if(aiAlg == ALPHA){
+                    //TODO finish ALPHA BETA PRUNING
 
                 }
-                //TODO fill this out
+
 
 
             }else{

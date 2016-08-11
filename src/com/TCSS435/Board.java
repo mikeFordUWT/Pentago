@@ -1,11 +1,6 @@
 package com.TCSS435;
 
-import sun.management.counter.perf.PerfByteArrayCounter;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.PriorityQueue;
 
 /**
  * Board class that acts as an intermediate between PentagoNode and PantagoGame
@@ -25,19 +20,16 @@ class Board{
 //    private final int END = 6;
 
     private PentagoNode myGameState;
-
-    private int myBs;
-    private int myWs;
-    private Player playerOne;
-    private Player playerTwo;
+    private Player maxPlayer;
+    private Player minPlayer;
 
     /**
      * Non-parametrized constructor for Board.
      */
-    public Board(Player player1, Player player2){
-        myGameState = new PentagoNode(0, null, player1);
-        playerOne = player1;
-        playerTwo = player2;
+    public Board(Player max, Player min){
+        myGameState = new PentagoNode(0, null, max);
+        maxPlayer = max;
+        minPlayer = min;
     }
 
     /**
@@ -83,13 +75,18 @@ class Board{
 14             bestValue := min(bestValue, v)
 15         return bestValue
      */
-    public PentagoNode minmaxPlace(PentagoNode theNode, int theDepth, Player player){
+    public PentagoNode minmax(PentagoNode theNode, int theDepth, Player player, char whichMove){
 
         PentagoNode tempNode = new PentagoNode(theNode.getDepth(), theNode, player);
         tempNode.setParent(theNode.getParent());
-        ArrayList<PentagoNode> moves = getMoves(player, tempNode);
+        ArrayList<PentagoNode> moves;
         ArrayList<PentagoNode> toReturn = new ArrayList<>();
 
+        if(whichMove == 'R'){
+            moves = getRotations(player, tempNode);
+        }else{
+            moves = getMoves(player, tempNode);
+        }
 
         if(theDepth == 0 || moves.size() == 0){
             toReturn.add(tempNode);
@@ -98,18 +95,9 @@ class Board{
 
         if(player.isMax()){
             int bestValue = Integer.MIN_VALUE;
-
-
-
             for(int i = 0; i < moves.size(); i++){
-                Player currentPlayer;
-                if(player.equals(playerOne)){
-                    currentPlayer = playerTwo;
-                }else{
-                    currentPlayer = playerOne;
-                }
 
-                PentagoNode v = minmaxPlace(moves.get(i), theDepth - 1, currentPlayer);
+                PentagoNode v = minmax(moves.get(i), theDepth - 1, minPlayer, whichMove);
                 if(v.getValue() > bestValue){
                     if(toReturn.size()>0){
                         toReturn.remove(0);
@@ -118,19 +106,11 @@ class Board{
                     toReturn.add(v);
                     bestValue = v.getValue();
                 }
-
-
             }
         }else{
             int bestValue = Integer.MAX_VALUE;
             for(int i = 0; i< moves.size(); i++){
-                Player currentPlayer;
-                if(player.equals(playerOne)){
-                    currentPlayer = playerTwo;
-                }else{
-                    currentPlayer = playerOne;
-                }
-                PentagoNode v = minmaxPlace(moves.get(i), theDepth -1, currentPlayer);
+                PentagoNode v = minmax(moves.get(i), theDepth -1, maxPlayer, whichMove);
                 if(v.getValue() < bestValue){
                     if(toReturn.size()>0){
                         toReturn.remove(0);
@@ -140,71 +120,64 @@ class Board{
                 }
             }
         }
-
-        myGameState = toReturn.get(0);
         return toReturn.get(0);
     }
 
-    public PentagoNode minmaxRotate(PentagoNode theNode, int theDepth, Player player){
-        PentagoNode tempNode = new PentagoNode(theNode.getDepth(), theNode, player);
-        tempNode.setParent(theNode.getParent());
-        ArrayList<PentagoNode> moves = getRotations(player, tempNode);
-        ArrayList<PentagoNode> toReturn = new ArrayList<>();
-
-
-        if(theDepth == 0 || moves.size() == 0){
-            toReturn.add(tempNode);
-            return tempNode;
-        }
-
-        if(player.isMax()){
-            int bestValue = Integer.MIN_VALUE;
-
-
-
-            for(int i = 0; i < moves.size(); i++){
-                Player currentPlayer;
-                if(player.equals(playerOne)){
-                    currentPlayer = playerTwo;
-                }else{
-                    currentPlayer = playerOne;
-                }
-
-                PentagoNode v = minmaxRotate(moves.get(i), theDepth - 1, currentPlayer);
-                if(v.getValue() > bestValue){
-                    if(toReturn.size()>0){
-                        toReturn.remove(0);
-                    }
-
-                    toReturn.add(v);
-                    bestValue = v.getValue();
-                }
-
-
-            }
-        }else{
-            int bestValue = Integer.MAX_VALUE;
-            for(int i = 0; i< moves.size(); i++){
-                Player currentPlayer;
-                if(player.equals(playerOne)){
-                    currentPlayer = playerTwo;
-                }else{
-                    currentPlayer = playerOne;
-                }
-                PentagoNode v = minmaxRotate(moves.get(i), theDepth -1, currentPlayer);
-                if(v.getValue() < bestValue){
-                    if(toReturn.size()>0){
-                        toReturn.remove(0);
-                    }
-                    toReturn.add(v);
-                    bestValue = v.getValue();
-                }
-            }
-        }
-
-        myGameState = toReturn.get(0);
-        return toReturn.get(0);
-    }
+//    public PentagoNode minmaxRotate(PentagoNode theNode, int theDepth, Player player){
+//        PentagoNode tempNode = new PentagoNode(theNode.getDepth(), theNode, player);
+//        tempNode.setParent(theNode.getParent());
+//        ArrayList<PentagoNode> moves = getRotations(player, tempNode);
+//        ArrayList<PentagoNode> toReturn = new ArrayList<>();
+//
+//
+//        if(theDepth == 0 || moves.size() == 0){
+//            toReturn.add(tempNode);
+//            return tempNode;
+//        }
+//
+//        if(player.isMax()){
+//            int bestValue = Integer.MIN_VALUE;
+//            for(int i = 0; i < moves.size(); i++){
+//                Player currentPlayer;
+//                if(player.equals(maxPlayer)){
+//                    currentPlayer = minPlayer;
+//                }else{
+//                    currentPlayer = maxPlayer;
+//                }
+//
+//                PentagoNode v = minmaxRotate(moves.get(i), theDepth - 1, currentPlayer);
+//                if(v.getValue() > bestValue){
+//                    if(toReturn.size()>0){
+//                        toReturn.remove(0);
+//                    }
+//
+//                    toReturn.add(v);
+//                    bestValue = v.getValue();
+//                }
+//            }
+//        }else{
+//            int bestValue = Integer.MAX_VALUE;
+//            for(int i = 0; i< moves.size(); i++){
+//                Player currentPlayer;
+//                if(player.equals(maxPlayer)){
+//                    currentPlayer = minPlayer;
+//                }else{
+//                    currentPlayer = maxPlayer;
+//                }
+//                PentagoNode v = minmaxRotate(moves.get(i), theDepth -1, currentPlayer);
+//                if(v.getValue() < bestValue){
+//                    if(toReturn.size()>0){
+//                        toReturn.remove(0);
+//                    }
+//                    toReturn.add(v);
+//                    bestValue = v.getValue();
+//                }
+//            }
+//        }
+//
+////        myGameState = toReturn.get(0);
+//        return toReturn.get(0);
+//    }
 
     /**
      * A depth limited minmax with alpha beta pruning.
@@ -249,10 +222,10 @@ class Board{
 //
 //            for(int i = 0; i < moves.size(); i++){
 //                Player currentPlayer;
-//                if(player.equals(playerOne)){
-//                    currentPlayer = playerTwo;
+//                if(player.equals(maxPlayer)){
+//                    currentPlayer = minPlayer;
 //                }else{
-//                    currentPlayer = playerOne;
+//                    currentPlayer = maxPlayer;
 //                }
 //
 //                PentagoNode v = alphaBetaPrune(moves.get(i), theDepth - 1, currentPlayer);
@@ -281,6 +254,66 @@ class Board{
 ////        }
 //        return toReturn;
 //    }
+
+        /*
+01 function alphabeta(node, depth, α, β, maximizingPlayer)
+02      if depth = 0 or node is a terminal node
+03          return the heuristic value of node
+04      if maximizingPlayer
+05          v := -∞
+06          for each child of node
+07              v := max(v, alphabeta(child, depth - 1, α, β, FALSE))
+08              α := max(α, v)
+09              if β ≤ α
+10                  break (* β cut-off *)
+11          return v
+12      else
+13          v := ∞
+14          for each child of node
+15              v := min(v, alphabeta(child, depth - 1, α, β, TRUE))
+16              β := min(β, v)
+17              if β ≤ α
+18                  break (* α cut-off *)
+19          return v
+     */
+    public PentagoNode alphaBetaPrune(PentagoNode theNode, int theDepth, int alpha, int beta, Player player, char whichMove){
+        PentagoNode tempNode = new PentagoNode(theNode.getDepth(), theNode, player);
+        tempNode.setParent(theNode.getParent());
+        ArrayList<PentagoNode> toReturn = new ArrayList<>();
+
+        ArrayList<PentagoNode> moves;
+        if(whichMove == 'R') {
+            moves = getRotations(player, tempNode);
+        }else{
+            moves = getMoves(player, tempNode);
+        }
+
+        if(theDepth == 0 || moves.size() == 0){
+            toReturn.add(tempNode);
+            return tempNode;
+        }
+
+        if(player.isMax()){
+            int iV = Integer.MIN_VALUE;
+            for(int i = 0; i < moves.size(); i++){
+
+            }
+
+        }else{
+            int iV = Integer.MAX_VALUE;
+            for(int i = 0; i < moves.size(); i++){
+
+            }
+        }
+
+
+        return toReturn.get(0);
+    }
+
+//    public PentagoNode alphaBetaRotate(PentagoNode theNode, int theDepth, int alpha, int beta, Player player){
+//
+//    }
+
 
 
     //return possible moves
