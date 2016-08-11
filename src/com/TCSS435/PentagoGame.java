@@ -196,14 +196,24 @@ public class PentagoGame {
 
             if(current.isAI()){
                 //TODO fill this out
-                PentagoNode newNode = board.minmaxPlace(board.getGameState(), 2, current);
+                PentagoNode temp = board.getGameState();
+                PentagoNode newNode = board.minmaxPlace(board.getGameState(), 3, current);
 //                board.getGameState() = newNode;
+//                PentagoNode currentNode = newNode;
+//                while(!currentNode.getParent().equals(temp) && currentNode.getParent()!= null){
+//
+//                    currentNode = currentNode.getParent();
+//
+//
+//                }
+//
+//                board.setGameState(currentNode);
                 System.out.println(board.getGameState().toString());
                 if(board.getGameState().winState()!= -1){
                     gameDone = true;
                 }
                 if(!gameDone){
-                    board.minmaxRotate(board.getGameState(), 2, current);
+                    board.minmaxRotate(board.getGameState(), 1, current);
                     System.out.println(board.getGameState().toString());
                     if(board.getGameState().winState() != -1){
                         gameDone = true;

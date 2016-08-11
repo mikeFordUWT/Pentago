@@ -49,6 +49,13 @@ class Board{
         return myGameState;
     }
 
+    /**
+     * Update the Board's current game state.
+     * @param newNode
+     */
+    public void setGameState(PentagoNode newNode){
+        myGameState = newNode;
+    }
 
     /**
      * A depth limited minmax.
@@ -146,8 +153,7 @@ class Board{
 
 
         if(theDepth == 0 || moves.size() == 0){
-            toReturn.add(tempNode);
-            return tempNode;
+
         }
 
         if(player.isMax()){
@@ -199,56 +205,10 @@ class Board{
         return toReturn.get(0);
     }
 
-//    public PentagoNode minmax1(PentagoNode theNode, int theDepth, Boolean maxPlayer, char moveOrRotate) {
-//        ArrayList<PentagoNode> moves = new ArrayList<>();
-//        if(moveOrRotate == 'm'){
-//            moves.addAll(getMoves(theNode.getPlayer(), theNode));
-//        }else if (moveOrRotate == 'r'){
-//            moves.addAll(getRotations(theNode, theNode.getPlayer()));
-//        }
-//
-//        PentagoNode toReturn;
-//        if (theDepth == 0 || moves.size() == 0) {//a zero depth tree OR the node is a win state
-//            toReturn = theNode;
-//        } else if (moves.size() == 1) {//the list contains a winState before rotation
-//            toReturn = moves.get(0);
-//        } else {//we have rotation so list size > 1
-//            if (maxPlayer) {
-////                if(moves.size()>){
-////
-////                }
-//                int bestScore = Integer.MIN_VALUE;
-//                PentagoNode best;
-//
-//                for(int i = 1; i < moves.size(); i++){
-//                    PentagoNode v = minmax1(moves.get(i), theDepth - 1, false, moveOrRotate);
-//                    if(v.getValue() > bestScore){
-//                        toReturn = v;
-//                        bestScore = v.getValue();
-//                    }
-//                }
-//            } else {//Min player
-//                int bestScore = Integer.MAX_VALUE;
-//                for(int i = 0 ; i< moves.size(); i++){
-//                    PentagoNode v = minmax1(moves.get(i), theDepth - 1, true, moveOrRotate);
-//                    if(v.getValue() < bestScore){
-//                        bestScore = v.getValue();
-//                        toReturn = v;
-//                    }
-//                }
-//
-//            }
-//
-//        }
-//
-//
-//        return toReturn;
-//    }
-
     /**
      * A depth limited minmax with alpha beta pruning.
      *
-     * @param theDepth
+//     * @param theDepth
      * @return
      */
     /*
@@ -272,19 +232,54 @@ class Board{
 18                  break (* α cut-off *)
 19          return v
      */
-    public String alphaBetaPrune(int theDepth, Player player){
-        String toReturn = "";
-        PentagoNode root = myGameState;
-        PentagoTree tree = new PentagoTree(root);
-
-        root.setPlayer(player);
-
-        boolean done = false;
-//        while(!done){
+//    public PentagoNode alphaBetaPrune(PentagoNode theNode, int theDepth, int alpha, int beta, Player player){
+//        PentagoNode tempNode = new PentagoNode(theNode.getDepth(), theNode, player);
+//        tempNode.setParent(theNode.getParent());
+//        ArrayList<PentagoNode> moves = getRotations(player, tempNode);
+//        ArrayList<PentagoNode> toReturn = new ArrayList<>();
+//
+//        if(theDepth == 0 || moves.size() == 0){
+//            toReturn.add(tempNode);
+//            return tempNode;
+//        }
+//
+//        if(player.isMax()){
+//            int bestValue = Integer.MAX_VALUE;
+//
+//            for(int i = 0; i < moves.size(); i++){
+//                Player currentPlayer;
+//                if(player.equals(playerOne)){
+//                    currentPlayer = playerTwo;
+//                }else{
+//                    currentPlayer = playerOne;
+//                }
+//
+//                PentagoNode v = alphaBetaPrune(moves.get(i), theDepth - 1, currentPlayer);
+//                if(v.getValue() > bestValue){
+//                    if(toReturn.size()>0){
+//                        toReturn.remove(0);
+//                    }
+//
+//                    toReturn.add(v);
+//                    bestValue = v.getValue();
+//                }
+//
+//
+//            }
 //
 //        }
-        return toReturn;
-    }
+//
+//        PentagoNode root = myGameState;
+//        PentagoTree tree = new PentagoTree(root);
+//
+//        root.setPlayer(player);
+//
+//        boolean done = false;
+////        while(!done){
+////
+////        }
+//        return toReturn;
+//    }
 
 
     //return possible moves
@@ -313,7 +308,6 @@ class Board{
                         temp.changeSpace(4, i-3, j-3, player.getPiece());
                         moves.add(temp);
                     }
-//                    moves.add(current);
                 }
             }
         }
