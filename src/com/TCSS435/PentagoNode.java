@@ -170,18 +170,22 @@ public class PentagoNode implements Comparable<PentagoNode> {
             if(current == previous && current != EMPTY){
                 if(current == BLACK){
                     bInRow++;
-                    if(bInRow == 3 || bInRow == 4){
-                        b+=10;
-                    }else if(bInRow == 5){
-                        b+=80;
+                    if(bInRow == 3){
+                        b += 100;
+                    }else if(bInRow == 4){
+                        b += 900;
+                    } else if(bInRow == 5){
+                        b += 99000;
                         bWin++;
                     }
                 }else{
                     wInRow++;
-                    if(wInRow == 3 || wInRow == 4){
-                        w += 10;
+                    if(wInRow == 3){
+                        w += 100;
+                    }else if(wInRow == 4){
+                        w += 900;
                     }else if(wInRow == 5){
-                        w += 80;
+                        w += 99000;
                         wWin++;
                     }
                 }
@@ -217,18 +221,22 @@ public class PentagoNode implements Comparable<PentagoNode> {
             if(current == previous && current != EMPTY){
                 if(current == BLACK){
                     bInRow++;
-                    if(bInRow == 3 || bInRow == 4){
-                        b+=10;
-                    }else if(bInRow == 5){
-                        b+=80;
+                    if(bInRow == 3){
+                        b += 100;
+                    }else if(bInRow == 4){
+                        b += 900;
+                    } else if(bInRow == 5){
+                        b += 99000;
                         bWin++;
                     }
                 }else{
                     wInRow++;
-                    if(wInRow == 3 || wInRow == 4){
-                        w += 10;
+                    if(wInRow == 3){
+                        w += 100;
+                    }else if(wInRow == 4){
+                        w += 900;
                     }else if(wInRow == 5){
-                        w += 80;
+                        w += 99000;
                         wWin++;
                     }
                 }
@@ -263,19 +271,22 @@ public class PentagoNode implements Comparable<PentagoNode> {
             if(current == previous && current != EMPTY){
                 if(current == BLACK){
                     bInRow++;
-                    if(bInRow == 3 || bInRow == 4){
-                        b += 10;
-                    }else if(bInRow == 5){
-                        b += 80;
+                    if(bInRow == 3){
+                        b += 100;
+                    }else if(bInRow == 4){
+                        b += 900;
+                    } else if(bInRow == 5){
+                        b += 99000;
                         bWin++;
                     }
-
                 }else{
                     wInRow++;
-                    if(wInRow == 3 || wInRow == 4){
-                        w += 10;
+                    if(wInRow == 3){
+                        w += 100;
+                    }else if(wInRow == 4){
+                        w += 900;
                     }else if(wInRow == 5){
-                        w += 80;
+                        w += 99000;
                         wWin++;
                     }
                 }
@@ -310,18 +321,22 @@ public class PentagoNode implements Comparable<PentagoNode> {
             if(current == previous && current != EMPTY){
                 if(current == BLACK){
                     bInRow++;
-                    if(bInRow == 3 || bInRow == 4){
-                        b += 10;
-                    }else if(bInRow == 5){
-                        b += 80;
+                    if(bInRow == 3){
+                        b += 100;
+                    }else if(bInRow == 4){
+                        b += 900;
+                    } else if(bInRow == 5){
+                        b += 99000;
                         bWin++;
                     }
                 }else{
                     wInRow++;
-                    if(wInRow == 3 || wInRow == 4){
-                        w += 10;
+                    if(wInRow == 3){
+                        w += 100;
+                    }else if(wInRow == 4){
+                        w += 900;
                     }else if(wInRow == 5){
-                        w += 80;
+                        w += 99000;
                         wWin++;
                     }
                 }
@@ -344,45 +359,87 @@ public class PentagoNode implements Comparable<PentagoNode> {
         return wb;
     }
 
+    private ArrayList<Integer> checkMid(char[][] board, int quad){
+        ArrayList<Integer> wb = new ArrayList<>();
+        int b = 0;
+        int w = 0;
+        if(quad == 1){
+            if(board[1][1] == BLACK){
+                b += 5;
+            }
+            if(board[1][1] == WHITE){
+                w += 5;
+            }
+        }else if (quad == 2){
+            if(board[1][4] == BLACK){
+                b += 5;
+            }
+            if(board[1][4] == WHITE){
+                w += 5;
+            }
+        }else if(quad == 3){
+            if(board[4][1] == BLACK){
+                b += 5;
+            }
+            if(board[4][1] == WHITE){
+                w += 5;
+            }
+        } else if(quad == 4){
+            if(board[4][4] == BLACK){
+                b += 5;
+            }
+            if(board[4][4] == WHITE){
+                w += 5;
+            }
+        }
+
+        wb.add(w);
+        wb.add(b);
+
+        return wb;
+    }
+
     /*
         Check all 18 ways a player can win for values, 10 for 3 in a row, 20 for 4 in a row and 100 for 5 in a row
      */
     private void findValue(){
         int b = 0, w = 0;
         char[][] wholeBoard = bringItTogether();
+
+        /*
+            QUAD 1 Center
+         */
+        ArrayList<Integer> q1Center = checkMid(wholeBoard, 1);
+        b += q1Center.get(1);
+        w += q1Center.get(0);
+
+        /*
+            QUAD 2 CENTER
+         */
+        ArrayList<Integer> q2Center = checkMid(wholeBoard, 2);
+        b += q2Center.get(1);
+        w += q2Center.get(0);
+
+        /*
+            QUAD 3 CENTER
+         */
+        ArrayList<Integer> q3Center = checkMid(wholeBoard, 3);
+        b += q3Center.get(1);
+        w += q3Center.get(0);
+
+        /*
+            QUAD 4 CENTER
+         */
+        ArrayList<Integer> q4Center = checkMid(wholeBoard, 4);
+        b += q4Center.get(1);
+        w += q4Center.get(0);
+
         /*
             ROW 0
          */
         ArrayList<Integer> row0 = checkRow(wholeBoard, 0);
         b+= row0.get(1);
         w+= row0.get(0);
-//        for(int i = 1; i < wholeBoard.length; i++){
-//            char current = wholeBoard[0][i], previous = wholeBoard[0][i-1];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//
-//        bInRow = 0;
-//        wInRow = 0;
 
         /*
             ROW 1
@@ -390,33 +447,6 @@ public class PentagoNode implements Comparable<PentagoNode> {
         ArrayList<Integer> row1 = checkRow(wholeBoard, 1);
         b += row1.get(1);
         w += row1.get(0);
-//        for(int i = 1; i < wholeBoard.length; i++){
-//            char current = wholeBoard[1][i], previous = wholeBoard[1][i-1];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//
-//        bInRow = 0;
-//        wInRow = 0;
 
         /*
             ROW 2
@@ -424,32 +454,6 @@ public class PentagoNode implements Comparable<PentagoNode> {
         ArrayList<Integer> row2 = checkRow(wholeBoard, 2);
         b += row2.get(1);
         w += row2.get(0);
-//        for(int i = 1; i < wholeBoard.length; i++){
-//            char current = wholeBoard[2][i], previous = wholeBoard[2][i-1];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//        bInRow = 0;
-//        wInRow = 0;
 
         /*
             ROW 3
@@ -457,33 +461,6 @@ public class PentagoNode implements Comparable<PentagoNode> {
         ArrayList<Integer> row3 = checkRow(wholeBoard, 3);
         b+= row3.get(1);
         w+= row3.get(0);
-//        for(int i = 1; i < wholeBoard.length; i++){
-//            char current = wholeBoard[3][i], previous = wholeBoard[3][i-1];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//
-//        bInRow = 0;
-//        wInRow = 0;
 
         /*
             ROW 4
@@ -491,32 +468,6 @@ public class PentagoNode implements Comparable<PentagoNode> {
         ArrayList<Integer> row4 = checkRow(wholeBoard, 4);
         b+= row4.get(1);
         w+= row4.get(0);
-//        for(int i = 1; i < wholeBoard.length; i++){
-//            char current = wholeBoard[4][i], previous = wholeBoard[4][i-1];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//        bInRow = 0;
-//        wInRow = 0;
 
         /*
             ROW 5
@@ -524,34 +475,6 @@ public class PentagoNode implements Comparable<PentagoNode> {
         ArrayList<Integer> row5 = checkRow(wholeBoard, 5);
         b += row5.get(1);
         w += row5.get(0);
-//        for(int i = 1; i < wholeBoard.length; i++){
-//            char current = wholeBoard[5][i], previous = wholeBoard[5][i-1];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//
-//        bInRow = 0;
-//        wInRow = 0;
-
 
         /*
             COLUMN 0
@@ -559,33 +482,6 @@ public class PentagoNode implements Comparable<PentagoNode> {
         ArrayList<Integer> col0 = checkColumn(wholeBoard, 0);
         b += col0.get(1);
         w += col0.get(0);
-//        for(int i = 1; i < wholeBoard.length; i++){
-//            char current = wholeBoard[i][0], previous = wholeBoard[i-1][0];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//
-//        bInRow = 0;
-//        wInRow = 0;
 
         /*
             COLUMN 1
@@ -593,33 +489,6 @@ public class PentagoNode implements Comparable<PentagoNode> {
         ArrayList<Integer> col1 = checkColumn(wholeBoard, 1);
         b += col1.get(1);
         w += col1.get(0);
-//        for(int i = 1; i < wholeBoard.length; i++){
-//            char current = wholeBoard[i][1], previous = wholeBoard[i-1][1];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//
-//        bInRow = 0;
-//        wInRow = 0;
 
         /*
             COLUMN 2
@@ -627,33 +496,6 @@ public class PentagoNode implements Comparable<PentagoNode> {
         ArrayList<Integer> col2 = checkColumn(wholeBoard, 2);
         b += col2.get(1);
         w += col2.get(0);
-//        for(int i = 1; i < wholeBoard.length; i++){
-//            char current = wholeBoard[i][2], previous = wholeBoard[i-1][2];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//
-//        bInRow = 0;
-//        wInRow = 0;
 
         /*
             COLUMN 3
@@ -661,32 +503,6 @@ public class PentagoNode implements Comparable<PentagoNode> {
         ArrayList<Integer> col3 = checkColumn(wholeBoard, 3);
         b += col3.get(1);
         w += col3.get(0);
-//        for(int i = 1; i < wholeBoard.length; i++){
-//            char current = wholeBoard[i][3], previous = wholeBoard[i-1][3];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//        bInRow = 0;
-//        wInRow = 0;
 
         /*
             COLUMN 4
@@ -694,32 +510,6 @@ public class PentagoNode implements Comparable<PentagoNode> {
         ArrayList<Integer> col4 = checkColumn(wholeBoard, 4);
         b += col4.get(1);
         w += col4.get(0);
-//        for(int i = 1; i < wholeBoard.length; i++){
-//            char current = wholeBoard[i][4], previous = wholeBoard[i-1][4];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//        bInRow = 0;
-//        wInRow = 0;
 
         /*
             COLUMN 5
@@ -728,66 +518,12 @@ public class PentagoNode implements Comparable<PentagoNode> {
         b += col5.get(1);
         w += col5.get(0);
 
-//        for(int i = 1; i < wholeBoard.length; i++){
-//            char current = wholeBoard[i][5], previous = wholeBoard[i-1][5];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//        bInRow = 0;
-//        wInRow = 0;
-
         /*
             MAIN DIAGONAL
          */
         ArrayList<Integer> diag0 = checkDiag(wholeBoard, 1, 5, 1);
         b += diag0.get(1);
         w += diag0.get(0);
-//        for(int i = 1; i < wholeBoard.length; i++){
-//            char current = wholeBoard[i][i], previous = wholeBoard[i-1][i-1];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//
-//        bInRow = 0;
-//        wInRow = 0;
 
         /*
             UPPER DIAGONAL
@@ -795,33 +531,6 @@ public class PentagoNode implements Comparable<PentagoNode> {
         ArrayList<Integer> diag1 = checkDiag(wholeBoard, 2, 5, 2);
         b += diag1.get(1);
         w += diag1.get(0);
-//        for(int i = 1; i < wholeBoard.length - 1; i++){
-//            char current = wholeBoard[i][i+1], previous = wholeBoard[i-1][i];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//
-//        bInRow = 0;
-//        wInRow = 0;
 
         /*
             LOWER DIAGONAL
@@ -829,33 +538,6 @@ public class PentagoNode implements Comparable<PentagoNode> {
         ArrayList<Integer> diag2 = checkDiag(wholeBoard, 1, 4, 0);
         b += diag2.get(1);
         w += diag2.get(0);
-//        for(int i = 1; i < wholeBoard.length-1; i++){
-//            char current = wholeBoard[i+1][i], previous = wholeBoard[i][i-1];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//
-//        bInRow = 0;
-//        wInRow = 0;
 
         /*
             MAIN ANTI DIAGONAL
@@ -864,99 +546,20 @@ public class PentagoNode implements Comparable<PentagoNode> {
         b += anti0.get(1);
         w += anti0.get(0);
 
-//        for(int i = 1; i < wholeBoard.length; i++){
-//            char current = wholeBoard[5-i][i], previous = wholeBoard[6-i][i-1];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//
-//        bInRow = 0;
-//        wInRow = 0;
-
         /*
             UPPER ANTI DIAGONAL
          */
         ArrayList<Integer> anti1 = checkAnti(wholeBoard, 1, 4, 4);
         b += anti1.get(1);
         w += anti1.get(0);
-//        for(int i = 1; i < wholeBoard.length - 1 ; i++){
-//            char current = wholeBoard[4-i][i], previous = wholeBoard[5-i][i-1];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
-//
-//        bInRow = 0;
-//        wInRow = 0;
+
         /*
             Lower Anti-diagonal
          */
         ArrayList<Integer> anti2 = checkAnti(wholeBoard, 2, 5, 6);
         b += anti2.get(1);
         w += anti2.get(0);
-//        for(int i = 1; i < wholeBoard.length - 1 ; i++){
-//            char current = wholeBoard[5-i][i+1], previous = wholeBoard[6-i][i];
-//            if(current == previous && current != EMPTY){
-//                if(current == BLACK){
-//                    bInRow++;
-//                    if(bInRow == 3 || bInRow == 4){
-//                        b += 10;
-//                    }else if(bInRow == 5){
-//                        b += 80;
-//                    }
-//
-//                }else{
-//                    wInRow++;
-//                    if(wInRow == 3 || wInRow == 4){
-//                        w += 10;
-//                    }else if(wInRow == 5){
-//                        w += 80;
-//                    }
-//                }
-//            }else{
-//                bInRow = 0;
-//                wInRow = 0;
-//            }
-//        }
 
-        //check at end and pass back to appropriate values
         if(myPlayer.isMax()){//current player is a max
             if(myPlayer.getPiece() == BLACK){
                 maxValue = b;
