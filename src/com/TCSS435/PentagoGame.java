@@ -133,7 +133,7 @@ public class PentagoGame {
             line = scanner.nextLine().toUpperCase();
             while(!go){
                 if(line.length() == 1 && (line.charAt(0) == ALPHA || line.charAt(0) == MINMAX)){
-                    aiAlg = line.charAt(0);
+                    aiAlg = Character.toUpperCase(line.charAt(0));
                     go = true;
                 } else {
                     System.out.println("That's not valid, enter either A or M");
@@ -175,10 +175,6 @@ public class PentagoGame {
             board = new Board(p2, p1);
         }
 
-
-
-
-
         output("", ps);
         output(board.getGameState().toString(), ps);
         boolean gameDone = false;
@@ -195,30 +191,44 @@ public class PentagoGame {
             board.getGameState().setPlayer(current);
 
             if(current.isAI()){
-                //TODO fill this out
-                PentagoNode temp = board.getGameState();
-                PentagoNode newNode = board.minmaxPlace(board.getGameState(), 3, current);
-//                board.getGameState() = newNode;
-//                PentagoNode currentNode = newNode;
-//                while(!currentNode.getParent().equals(temp) && currentNode.getParent()!= null){
-//
-//                    currentNode = currentNode.getParent();
-//
-//
-//                }
-//
-//                board.setGameState(currentNode);
-                System.out.println(board.getGameState().toString());
-                if(board.getGameState().winState()!= -1){
-                    gameDone = true;
-                }
-                if(!gameDone){
-                    board.minmaxRotate(board.getGameState(), 1, current);
+                aiAlg = Character.toUpperCase(aiAlg);
+                if(aiAlg == 'M'){
+                    PentagoNode temp = board.getGameState();
+                    PentagoNode newNode = board.minmaxPlace(board.getGameState(), 3, current);
+
+                    PentagoNode currentNode = newNode;
+                    while(!currentNode.getParent().equals(temp) && currentNode.getParent()!= null){
+
+                        currentNode = currentNode.getParent();
+
+
+                    }
+
+                    board.setGameState(currentNode);
                     System.out.println(board.getGameState().toString());
-                    if(board.getGameState().winState() != -1){
+                    if(board.getGameState().winState()!= -1){
                         gameDone = true;
                     }
+                    if(!gameDone){
+
+                        temp = board.getGameState();
+                        newNode = board.minmaxRotate(board.getGameState(), 3, current);
+                        currentNode = newNode;
+                        while (!currentNode.getParent().equals(temp) && currentNode.getParent() != null){
+                            currentNode = currentNode.getParent();
+                        }
+                        board.setGameState(currentNode);
+
+                        System.out.println(board.getGameState().toString());
+                        if(board.getGameState().winState() != -1){
+                            gameDone = true;
+                        }
+                    }
+                }else if(aiAlg == 'B'){
+
                 }
+                //TODO fill this out
+
 
             }else{
                 output(current.getName()+"'s turn", ps);

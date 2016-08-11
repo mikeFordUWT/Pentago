@@ -153,7 +153,8 @@ class Board{
 
 
         if(theDepth == 0 || moves.size() == 0){
-
+            toReturn.add(tempNode);
+            return tempNode;
         }
 
         if(player.isMax()){
