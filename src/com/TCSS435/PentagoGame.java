@@ -18,6 +18,8 @@ public class PentagoGame {
     static final boolean AI_STATUS = false;
     static final char BLACK = 'B', WHITE = 'W', LEFT = 'L', RIGHT ='R', ALPHA = 'A', MINMAX = 'M';
 
+    static final int TREE_DEPTH  = 5;
+
     static final String WELCOME =
               "****************************************\n"
             + "*          WELCOME TO PENTAGO!         *\n"
@@ -193,8 +195,9 @@ public class PentagoGame {
                 output(current.getName()+"'s turn", ps);
                 aiAlg = Character.toUpperCase(aiAlg);
                 if(aiAlg == MINMAX){
+                    long startTurn = System.currentTimeMillis();
                     PentagoNode temp = board.getGameState();
-                    PentagoNode newNode = board.minmax(board.getGameState(), 3, current, MINMAX);
+                    PentagoNode newNode = board.minmax(board.getGameState(), TREE_DEPTH, current, MINMAX);
 
                     PentagoNode currentNode = newNode;
                     while(!currentNode.getParent().equals(temp) && currentNode.getParent()!= null){
@@ -211,7 +214,7 @@ public class PentagoGame {
                     }
                     if(!gameDone){
                         temp = board.getGameState();
-                        newNode = board.minmax(board.getGameState(), 3, current, RIGHT);
+                        newNode = board.minmax(board.getGameState(), TREE_DEPTH, current, RIGHT);
                         currentNode = newNode;
                         while (!currentNode.getParent().equals(temp) && currentNode.getParent() != null){
                             currentNode = currentNode.getParent();
@@ -223,9 +226,47 @@ public class PentagoGame {
                             gameDone = true;
                         }
                     }
-                }else if(aiAlg == ALPHA){
-                    //TODO finish ALPHA BETA PRUNING
 
+                    long endTurn = System.currentTimeMillis();
+
+                    System.out.println(endTurn - startTurn + " ms\n");
+                }else if(aiAlg == ALPHA){
+                    long startTurn = System.currentTimeMillis();
+                    //TODO finish ALPHA BETA PRUNING
+                    PentagoNode temp = board.getGameState();
+                    PentagoNode newNode = board.alphaBetaPrune(temp, TREE_DEPTH, Integer.MIN_VALUE, Integer.MAX_VALUE, current, MINMAX);
+
+                    PentagoNode currentNode = newNode;
+
+                    while(!currentNode.getParent().equals(temp) && currentNode.getParent()!= null){
+
+                        currentNode = currentNode.getParent();
+                    }
+
+                    board.setGameState(currentNode);
+                    output(board.getGameState().toString(), ps);
+                    if(board.getGameState().winState()!= -1){
+                        gameDone = true;
+                    }
+
+                    if(!gameDone){
+                        temp = board.getGameState();
+                        newNode = board.alphaBetaPrune(board.getGameState(), TREE_DEPTH, Integer.MIN_VALUE, Integer.MAX_VALUE, current, RIGHT);
+
+                        currentNode = newNode;
+                        while (!currentNode.getParent().equals(temp) && currentNode.getParent() != null){
+                            currentNode = currentNode.getParent();
+                        }
+                        board.setGameState(currentNode);
+
+                        output(board.getGameState().toString(), ps);
+                        if(board.getGameState().winState() != -1){
+                            gameDone = true;
+                        }
+                    }
+                    long endTurn = System.currentTimeMillis();
+
+                    System.out.println(endTurn - startTurn + " ms\n");
                 }
 
 
