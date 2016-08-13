@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class PentagoNode implements Comparable<PentagoNode> {
     private final char EMPTY = '.', WHITE = 'W', BLACK = 'B', TIE = 'T';
     private final ArrayList<Integer> QUADS = new ArrayList<>(Arrays.asList(1,2,3,4));
-    private final String OCCUPIED = "That space isn't available";
+    private final String OCCUPIED = "\nThat space isn't available";
     private final int QUAD_DIM = 3;
     private final int BOARD_DIM = 6;
     private char[][] myQ1;
@@ -722,6 +722,7 @@ public class PentagoNode implements Comparable<PentagoNode> {
                         toReturn = true;
                     }else {
                         System.out.println(OCCUPIED);
+                        toReturn = false;
                     }
                 }
 

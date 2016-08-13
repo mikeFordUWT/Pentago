@@ -18,7 +18,7 @@ public class PentagoGame {
     static final boolean AI_STATUS = false;
     static final char BLACK = 'B', WHITE = 'W', LEFT = 'L', RIGHT ='R', ALPHA = 'A', MINMAX = 'M';
 
-    static final int TREE_DEPTH  = 5;
+    static final int TREE_DEPTH  = 3;
 
     static final String WELCOME =
               "****************************************\n"
@@ -307,10 +307,24 @@ public class PentagoGame {
                         System.out.println(PIECE_SPOT);
                         line = scanner.nextLine();
                     }
+                    ArrayList<Integer> coords = spotToArray.get(spot);
+                    if(!board.getGameState().changeSpace(spotQuad, coords.get(0), coords.get(1), current.getPiece())){
+                        System.out.println("\nTry again  " + current.getName());
+                        System.out.println(board.getGameState().toString());
+
+                        System.out.println(PIECE_SPOT);
+                        line = scanner.nextLine();
+                        go = false;
+                    }else{
+                        go = true;
+                    }
                 }
                 go = false;
-                ArrayList<Integer> coords = spotToArray.get(spot);
-                board.getGameState().changeSpace(spotQuad, coords.get(0), coords.get(1), current.getPiece());
+
+//                board.getGameState().changeSpace(spotQuad, coords.get(0), coords.get(1), current.getPiece());
+
+
+
                 output(board.getGameState().toString(), ps);
                 if(board.getGameState().winState()!= -1){
                     gameDone = true;
