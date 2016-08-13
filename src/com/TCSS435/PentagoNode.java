@@ -1,12 +1,16 @@
 package com.TCSS435;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by Mike on 7/26/16.
+ * PentagoNode class that represents each node in a tree.
+ *
+ * @author Michael Ford
+ * TCSS 435
+ * Summer 2016
  */
+
 public class PentagoNode implements Comparable<PentagoNode> {
     private final char EMPTY = '.', WHITE = 'W', BLACK = 'B', TIE = 'T';
     private final ArrayList<Integer> QUADS = new ArrayList<>(Arrays.asList(1,2,3,4));
@@ -31,6 +35,13 @@ public class PentagoNode implements Comparable<PentagoNode> {
 
     private int maxValue, minValue;
 
+    /**
+     * Constructor.
+     *
+     * @param theDepth how deep in the tree is the node
+     * @param parent who did this come from
+     * @param player who's playing?
+     */
     public PentagoNode(int theDepth, PentagoNode parent, Player player){
         myQ1 = new char[QUAD_DIM][QUAD_DIM];
         myQ2 = new char[QUAD_DIM][QUAD_DIM];
@@ -69,92 +80,124 @@ public class PentagoNode implements Comparable<PentagoNode> {
         myValue = maxValue + minValue;
     }
 
+    /**
+     * Set the player of the node.
+     *
+     * @param thePlayer who is playing
+     */
     public void setPlayer(Player thePlayer){
         myPlayer = thePlayer;
     }
 
+    /**
+     * Add a child to this node.
+     *
+     * @param theChild the node to add to the list
+     */
     public void addChild(PentagoNode theChild){
         myChildren.add(theChild);
     }
 
+    /**
+     * Get the children
+     *
+     * @return A list of children
+     */
     public ArrayList<PentagoNode> getChildren(){
         return myChildren;
     }
 
+    /**
+     * Find out who produced this child!
+     *
+     * @return the parent node
+     */
     public PentagoNode getParent(){
         return myParent;
     }
 
+    /**
+     * This node was adopted so decide who it belongs to.
+     *
+     * @param theParent the adopting node
+     */
     public void setParent(PentagoNode theParent){
         myParent = theParent;
     }
 
-    public int getAlpha(){
-        return myAlpha;
-    }
-
-    public void setAlpha(int newAlpha){
-        myAlpha = newAlpha;
-    }
-
-    public int getBeta(){
-        return myBeta;
-    }
-
-    public void setBeta(int newBeta){
-        myBeta = newBeta;
-    }
-
+    /**
+     * What is this node worth?
+     *
+     * @return the overall value of the node
+     */
     public int getValue(){
         return myValue;
     }
 
+    /**
+     * Who is using this node?
+     * @return the player using the node
+     */
     public Player getPlayer(){
         return myPlayer;
     }
 
+    /**
+     * How deep should this node be?
+     *
+     * @param theDepth depth level
+     */
     public void setDepth(int theDepth){
 
     }
 
+    /**
+     * How deep is this node?
+     *
+     * @return the depth
+     */
     public int getDepth(){
         return myDepth;
     }
 
+    /**
+     * Get QUAD 1
+     * @return the 2d char array
+     */
     public char[][] getQ1() {
         return myQ1;
     }
 
+    /**
+     * Get QUAD 2
+     * @return the 2d char array
+     */
     public char[][] getQ2() {
         return myQ2;
     }
 
+    /**
+     * Get QUAD 3
+     * @return the 2d char array
+     */
     public char[][] getQ3() {
         return myQ3;
     }
 
+    /**
+     * Get QUAD 4
+     * @return the 2d char array
+     */
     public char[][] getQ4() {
         return myQ4;
     }
 
+    /**
+     * Get the whole board
+     * @return the 2d char array
+     */
     public char[][] getState(){
         return bringItTogether();
-    }
-
-    /*
-        Checks to see if the a state is a tie.
-     */
-    private int tie(){
-        int count = 0;
-        char[][] whole = bringItTogether();
-        for(int i =0; i < whole.length; i++){
-            for(int j = 0; j < whole.length; j++){
-                if(whole[i][j] == EMPTY){
-                    count++;
-                }
-            }
-        }
-        return count;
     }
 
     /*
@@ -593,10 +636,10 @@ public class PentagoNode implements Comparable<PentagoNode> {
             win = 2;
         }else if(bWin < wWin) {
             win = 1;
-        }else if(bWin > 0 && wWin > 0 && bWin == wWin && tie() == 0) {
+        }else if(bWin > 0 && wWin > 0 && bWin == wWin) {
             win = 0;
         }else {
-            win=-1;
+            win = -1;
         }
         return win;
     }

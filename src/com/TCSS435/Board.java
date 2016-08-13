@@ -41,11 +41,13 @@ class Board{
     }
 
     /**
-     * A depth limited minmax.
+     * A recursive Minimax implementation
      *
-     * @param theDepth
-     *
-     * @return
+     * @param theNode the node to be used in each recursive call
+     * @param theDepth how deep of a tree do we have?
+     * @param player the player that is currently going
+     * @param whichMove is it a rotation or placement
+     * @return the final node with the best possible score.
      */
     /*
 01 function minimax(node, depth, maximizingPlayer)
@@ -116,9 +118,14 @@ class Board{
 
 
     /**
-     * A depth limited minmax with alpha beta pruning.
+     * A Minimax optimization in the form of Alpha-Beta Pruning.
      *
-//     * @param theDepth
+     * @param theNode The Node to be evaulated
+     * @param theDepth Limits the depth of the tree
+     * @param alpha The alpha initially set to MIN
+     * @param beta The Beta initially set to MAX
+     * @param player the current player
+     * @param whichMove rotation or placement
      * @return
      */
         /*
@@ -203,7 +210,7 @@ class Board{
 
     }
 
-    //return possible moves
+    /* Helper method that returns the possible moves for a given node*/
     private ArrayList<PentagoNode> getMoves(Player player, PentagoNode theNode){
         ArrayList<PentagoNode> moves = new ArrayList<>();
         char[][] state = theNode.getState();
@@ -237,9 +244,7 @@ class Board{
         return moves;
     }
 
-    /*
-        Return a list of all possible rotations
-     */
+    /* Helper method that returns all possible rotations */
     private ArrayList<PentagoNode> getRotations(Player player, PentagoNode theNode){
         ArrayList<PentagoNode> moves = new ArrayList<>();
         PentagoNode Q1L = rotateAndAdd(theNode, 'l', player, 1);
@@ -262,6 +267,7 @@ class Board{
         return moves;
     }
 
+    /* Helper method that creates a new node with rotation*/
     private PentagoNode rotateAndAdd(PentagoNode theNode, char direction, Player player, int quad){
         PentagoNode newNode = new PentagoNode(theNode.getDepth()+1, theNode, player);
         if(direction == 'l'){
@@ -271,21 +277,4 @@ class Board{
         }
         return newNode;
     }
-
-    private PentagoNode maxNode(PentagoNode first, PentagoNode second){
-        if(first.getValue() > second.getValue()){
-            return first;
-        }else{
-            return second;
-        }
-    }
-
-    private PentagoNode minNode(PentagoNode first, PentagoNode second){
-        if(first.getValue() < second.getValue()){
-            return first;
-        }else{
-            return second;
-        }
-    }
-
 }
