@@ -1,7 +1,6 @@
-package com.TCSS435;
-
 import java.io.*;
 import java.util.*;
+
 
 /**
  * PentagoGame class, which house all of the user input validation and logic.

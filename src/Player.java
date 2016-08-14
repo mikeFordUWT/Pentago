@@ -1,5 +1,3 @@
-package com.TCSS435;
-
 /**
  * A Player class that represents a player, can be AI or Human.
  *
