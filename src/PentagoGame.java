@@ -208,6 +208,7 @@ public class PentagoGame {
                     }
 
                     board.setGameState(currentNode);//update the game state
+                    output("MOVE:", ps);
                     output(board.getGameState().toString(), ps);//print it out!
                     int result = board.getGameState().winState();
                     if(result != -1){//game is over
@@ -221,7 +222,7 @@ public class PentagoGame {
                             currentNode = currentNode.getParent();
                         }
                         board.setGameState(currentNode);
-
+                        output("ROTATION: ", ps);
                         output(board.getGameState().toString(), ps);
                         result = board.getGameState().winState();
                         if(result != -1){
@@ -320,7 +321,7 @@ public class PentagoGame {
                     }
                 }
                 go = false;
-
+                output("MOVE: ", ps);
                 output(board.getGameState().toString(), ps);
                 int result = board.getGameState().winState();
                 if(result != -1){
@@ -333,6 +334,7 @@ public class PentagoGame {
                     }else if(direction == RIGHT){
                         board.getGameState().rotateRight(rotateQuad);
                     }
+                    output("ROTATION: ", ps);
                     output(board.getGameState().toString(), ps);
                     result = board.getGameState().winState();
                     if(result != -1){
