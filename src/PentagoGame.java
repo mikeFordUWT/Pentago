@@ -180,6 +180,8 @@ public class PentagoGame {
         }
 
         output("", ps);
+        output("PLAYER 1: " + p1.toString() + "\n", ps);
+        output("PLAYER 2: " + p2.toString() + "\n", ps);
         output(board.getGameState().toString(), ps);//initial game state
         boolean gameDone = false;
         while(!gameDone){//until a winner is declared AKA the game LOOP!

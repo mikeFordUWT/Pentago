@@ -63,6 +63,6 @@ public class Player {
      */
     @Override
     public String toString(){
-        return "AI: " + myAI + "\nNAME: " + myName + "\nMAX: " + max;
+        return "\nNAME: " + myName + " AI: " + myAI +  " MAX: " + max;
     }
 }
