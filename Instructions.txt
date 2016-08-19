@@ -1,0 +1,41 @@
+****************************
+*   PENTAGO INSTRUCTIONS   *
+****************************
+
+To start a game open terminal and cd into PentagoGame/src and type:
+java PentagoGame
+This should launch a console based version of Pentago.
+
+The first question is if the player would like to play with 1 or 2 players.
+Type 1 for a single player game against the AI or 2 to play with another human.
+
+From there the user/first player will be prompted for what color they would like
+their piece to be, which will default the other player's piece to the other color.
+
+After this if there is another human player they will be prompted for their name.
+If the second player is an AI, the user will be prompted for which algorithm they
+would like the AI to use.[A for alpha-beta or M for minimax]
+
+I have the depth of the tree for both algorithms set to 3, since the minimax can
+take a bit. If you would like to change it, there is a constant in PentagoGame.java
+called TREE_DEPTH on line 25.
+Just change that value and recompile with:
+javac PentagoGame.java
+
+The next prompt will be which player the user would like to have the first turn.
+For the first player, enter 1 and for the second(AI or Human) enter 2.
+
+Beyond this, the user(s) will be prompted for their moves, while the AI will make
+there moves based on the algorithm chosen.
+
+If the user's input is ever invalid they will be prompted to re-enter.
+
+I have the moves and rotation print out as board states, for better visualization.
+I found this to be more pleasing for looking back at the game than the
+1/4 2l format.
+
+Beyond that the game outputs the name of the player who won or a tie, upon
+completion.
+
+All relevant output is placed in the file 'output.txt', which will be overwritten
+with each new game. The output file will be on the same level as the src folder.
