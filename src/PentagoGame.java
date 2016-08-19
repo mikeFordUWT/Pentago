@@ -22,7 +22,7 @@ public class PentagoGame {
     static final String AI_NAME = "HAL 9000";
     static final boolean AI_STATUS = false;
     static final char BLACK = 'B', WHITE = 'W', LEFT = 'L', RIGHT ='R', ALPHA = 'A', MINMAX = 'M';
-    static final int TREE_DEPTH  = 4;
+    static final int TREE_DEPTH  = 3;//change if you want to try a deeper tree
     static final String WON = " WON!";
     static final String WELCOME =
               "****************************************\n"
