@@ -22,7 +22,6 @@ public class Player {
         myPiece = thePiece;
         myName = name;
         max = theMax;
-
     }
 
     /**
@@ -63,6 +62,6 @@ public class Player {
      */
     @Override
     public String toString(){
-        return "\nNAME: " + myName + " AI: " + myAI +  " MAX: " + max;
+        return "\nNAME: " + myName + " AI: " + myAI +  " MAX: " + max + " PIECE: " + myPiece;
     }
 }

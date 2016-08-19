@@ -24,13 +24,8 @@ public class PentagoNode implements Comparable<PentagoNode> {
     private int myDepth;
     private PentagoNode myParent;
     private Player myPlayer;
-    private int myAlpha;
-    private int myBeta;
     private int win;
-
     private int bWin, wWin;
-
-
     private int maxValue, minValue;
 
     /**
@@ -66,8 +61,6 @@ public class PentagoNode implements Comparable<PentagoNode> {
         myParent = parent;
         myPlayer = player;
         myChildren = new ArrayList<>();
-        myAlpha = Integer.MIN_VALUE;
-        myBeta = Integer.MAX_VALUE;
         maxValue = 0;
         minValue = 0;
         win = -1;

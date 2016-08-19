@@ -11,6 +11,9 @@ class Board{
     private PentagoNode myGameState;
     private Player maxPlayer;
     private Player minPlayer;
+    private int expandedNodes;
+//    private PentagoTree tree;
+
 
     /**
      * Non-parametrized constructor for Board.
@@ -19,6 +22,27 @@ class Board{
         myGameState = new PentagoNode(0, null, max);
         maxPlayer = max;
         minPlayer = min;
+//        tree = new PentagoTree(myGameState);
+        expandedNodes= 0;
+
+    }
+
+
+    /**
+     * Retrieve the amount of nodes that were expanded.
+     *
+     * @return the integer representation of how many nodes were expanded.
+     */
+    public int getExpandedNodes(){
+        return expandedNodes;
+    }
+
+    /**
+     * Set the number of nodes expanded, this will typically be 0.
+     * @param howMany the number of nodes that will be expanded
+     */
+    public void setExpandedNodes(int howMany){
+        expandedNodes = howMany;
     }
 
     /**
@@ -78,7 +102,7 @@ class Board{
         }else{
             moves = getMoves(player, tempNode);
         }
-
+        expandedNodes++;
         if(theDepth == 0 || moves.size() == 0){
             toReturn.add(tempNode);
             return tempNode;
@@ -158,7 +182,7 @@ class Board{
         }else{
             moves = getMoves(player, tempNode);
         }
-
+        expandedNodes++;
         if(theDepth == 0 || moves.size() == 0){
             toReturn.add(tempNode);
             return tempNode;

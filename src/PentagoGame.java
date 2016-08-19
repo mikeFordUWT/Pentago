@@ -22,7 +22,7 @@ public class PentagoGame {
     static final String AI_NAME = "HAL 9000";
     static final boolean AI_STATUS = false;
     static final char BLACK = 'B', WHITE = 'W', LEFT = 'L', RIGHT ='R', ALPHA = 'A', MINMAX = 'M';
-    static final int TREE_DEPTH  = 3;
+    static final int TREE_DEPTH  = 4;
     static final String WON = " WON!";
     static final String WELCOME =
               "****************************************\n"
@@ -49,11 +49,11 @@ public class PentagoGame {
         Player p1, p2;
 
 
-        boolean p1Human = AI_STATUS, p2AI = !AI_STATUS, go = false;
+        boolean p2AI = !AI_STATUS, go = false;
         String p1Name = "",p2Name = "";
         char aiAlg = ' ';
         output(WELCOME, ps);
-        output(PLAY_NUM, ps);
+        System.out.println(PLAY_NUM);
         int playAmt = 0 ;
         while(!go){
             int numPlayers = 0;
@@ -88,11 +88,11 @@ public class PentagoGame {
                 go = true;
             } else {
                 System.out.println("You have to enter a name");
-                output(FIRST_NAME, ps);
+                System.out.println(FIRST_NAME);
                 line = scanner.nextLine();
             }
         }
-
+        ps.println(line);
         go = false;
 
         char player1Token = ' ';
@@ -110,10 +110,11 @@ public class PentagoGame {
                 go = true;
             }else{//user input not correct, re-prompt
                 output("The choices are B or W.\n", ps);
-                output(TOKEN_COLOR, ps);
+                System.out.println(TOKEN_COLOR);
                 line = scanner.nextLine().toUpperCase();
             }
         }
+        ps.println(line);
         go = false;
 
         if(playAmt == 2){//needs a second player name
@@ -130,6 +131,8 @@ public class PentagoGame {
                     line = scanner.nextLine();
                 }
             }
+            ps.println(line);
+
         } else {
             p2Name = AI_NAME;
             output(ALGORITM, ps);
@@ -144,22 +147,31 @@ public class PentagoGame {
                     line = scanner.nextLine().toUpperCase();
                 }
             }
+            if(aiAlg == ALPHA){
+                ps.println("ALPHA-BETA PRUNING");
+            }else{
+                ps.println("MINIMAX");
+            }
+
 
         }
+
         go = false;
 
-        output(WHICH_FIRST, ps);//who will go first
+        System.out.println(WHICH_FIRST);
         line = scanner.nextLine().replaceAll("\\s+", "");//remove spaces
         int first = 0;
         while(!go){
-            if(line.length() != 1 && (line.charAt(0) != '1' || line.charAt(0) != '2')){//confirm only 1 int and it's 1 or 2
-                output("The only options here are 1 or 2.", ps);
-                output(WHICH_FIRST, ps);
-                line = scanner.nextLine();
-            }else{
+
+            if(isParseable(line) && line.length() == 1 && (line.charAt(0) == '1' || line.charAt(0) == '2')){
                 first = Integer.parseInt(line);
                 go = true;
+            }else{
+                System.out.println("The only options here are 1 or 2.");
+                System.out.println(WHICH_FIRST);
+                line = scanner.nextLine();
             }
+
         }
 
         go = false;
@@ -196,10 +208,17 @@ public class PentagoGame {
             board.getGameState().setPlayer(current);
 
             if(current.isAI()){//Skynet is coming for us!
+                output("", ps);
+                output("PLAYER 1: " + p1.toString() + "\n", ps);
+                output("PLAYER 2: " + p2.toString() + "\n", ps);
                 long startTurn = System.currentTimeMillis();//measures the start time for each turn
                 output(current.getName()+"'s turn", ps);//print out current player's name
                 aiAlg = Character.toUpperCase(aiAlg);//uppercase really is the best case
-
+                ArrayList<char[][]> quads = new ArrayList<>();
+                quads.add(board.getGameState().getQ1());
+                quads.add(board.getGameState().getQ2());
+                quads.add(board.getGameState().getQ3());
+                quads.add(board.getGameState().getQ4());
                 if(aiAlg == MINMAX){//we're taking the slow route
                     PentagoNode currentNode = board.minmax(board.getGameState(), TREE_DEPTH, current, MINMAX);
                     //find the first move to take
@@ -209,6 +228,8 @@ public class PentagoGame {
 
                     board.setGameState(currentNode);//update the game state
                     output("MOVE:", ps);
+                    System.out.println("EXPANDED[move]: " + board.getExpandedNodes() + "\nfor tree of depth: " + TREE_DEPTH);
+                    board.setExpandedNodes(0);
                     output(board.getGameState().toString(), ps);//print it out!
                     int result = board.getGameState().winState();
                     if(result != -1){//game is over
@@ -223,6 +244,8 @@ public class PentagoGame {
                         }
                         board.setGameState(currentNode);
                         output("ROTATION: ", ps);
+                        System.out.println("EXPANDED[rotation]: " + board.getExpandedNodes() + "\nfor tree of depth: " + TREE_DEPTH);
+                        board.setExpandedNodes(0);
                         output(board.getGameState().toString(), ps);
                         result = board.getGameState().winState();
                         if(result != -1){
@@ -240,6 +263,9 @@ public class PentagoGame {
                     }
 
                     board.setGameState(currentNode);
+                    output("MOVE: ", ps);
+                    System.out.println("EXPANDED[move]: " + board.getExpandedNodes() + "\nfor tree of depth: " + TREE_DEPTH);
+                    board.setExpandedNodes(0);
                     output(board.getGameState().toString(), ps);
                     int result = board.getGameState().winState();
                     if(result != -1){
@@ -256,7 +282,9 @@ public class PentagoGame {
                             currentNode = currentNode.getParent();
                         }
                         board.setGameState(currentNode);
-
+                        output("ROTATION: ", ps);
+                        System.out.println("EXPANDED[rotation]: " + board.getExpandedNodes() + "\nfor tree of depth: " + TREE_DEPTH);
+                        board.setExpandedNodes(0);
                         output(board.getGameState().toString(), ps);
                         result = board.getGameState().winState();
                         if(result != -1){
@@ -265,10 +293,17 @@ public class PentagoGame {
                         }
                     }
 
+
                 }
+//                System.out.println("EXPANDED: " + board.getExpandedNodes() + "\nfor tree of depth: " + TREE_DEPTH);
+                board.setExpandedNodes(0);
                 long endTurn = System.currentTimeMillis();
                 System.out.println(endTurn - startTurn + " ms\n"); // How long did the AI take to make a move
             }else{
+                output("", ps);
+                output("PLAYER 1: " + p1.toString() + "\n", ps);
+                output("PLAYER 2: " + p2.toString() + "\n", ps);
+                System.out.println("CURRENT STATE:\n"+board.getGameState().toString());
                 output(current.getName()+"'s turn", ps);
                 System.out.println(PIECE_SPOT);
                 line = scanner.nextLine();
