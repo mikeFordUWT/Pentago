@@ -2,7 +2,23 @@ Michael Ford
 TCSS 435
 Summer 2016
 
+I wrote this program in Java 8 and built it in JetBrains IntelliJ IDEA.
+This code is also on github at: https://github.com/mikeFordUWT/Pentago.git
+
 Algorithm data and analysis.
+
+The alpha-beta pruning optimization of the minimax algorithm is by far much faster.
+At a look ahead of a 3 depth tree Alpha-Beta looked at a total of 21432 vs.
+Minimax's 220803 for a difference of 199371 less nodes expanded over the course
+of the game.
+
+At a look ahead of a 4 depth tree Alpha-Beta looked at a total of 173619 vs.
+Minimax's 5825666 for a difference of 5652047 less nodes expanded over the
+course of the game.
+
+With all this in mind the advantage of Alpha-Beta pruning is evident and based on the
+difference in time complexities, could potentially double the depth of a look
+ahead game tree in the same amount of time.
 
 MINIMAX:
 TIME COMPLEXITY: O(b^m)
